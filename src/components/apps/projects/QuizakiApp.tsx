@@ -5,7 +5,6 @@ import {
   Code,
   Users,
   Shield,
-  Gamepad2,
 } from "lucide-react";
 
 const QuizakiApp = () => {

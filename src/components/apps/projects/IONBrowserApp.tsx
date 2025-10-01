@@ -3,7 +3,6 @@ import {
   Github,
   Star,
   Code,
-  Globe,
   Zap,
   Smartphone,
 } from "lucide-react";

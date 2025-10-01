@@ -3,7 +3,6 @@ import {
   Github,
   Star,
   Code,
-  Mail,
   Zap,
   Calendar,
 } from "lucide-react";

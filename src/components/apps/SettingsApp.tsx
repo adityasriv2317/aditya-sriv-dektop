@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Monitor, Moon, Sun, RotateCcw, Info, Palette, Code, Database, Globe2 } from 'lucide-react';
+import { Monitor, Moon, Sun, RotateCcw, Info, Palette, Code, Globe2 } from 'lucide-react';
 import type { WallpaperData } from '../main/types';
 
 interface SettingsAppProps {

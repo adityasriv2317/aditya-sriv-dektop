@@ -4,8 +4,6 @@ import {
   Star,
   Code,
   Zap,
-  Smartphone,
-  Brain,
 } from "lucide-react";
 
 const LuminaAIApp = () => {

@@ -3,7 +3,6 @@ import {
   Github,
   Star,
   Code,
-  Cloud,
   Smartphone,
   MapPin,
 } from "lucide-react";

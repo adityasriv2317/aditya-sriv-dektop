@@ -1,4 +1,4 @@
-import { Mail, Linkedin, Github, Globe, MapPin, Phone, Download } from 'lucide-react';
+import { Mail, Linkedin, Github, Globe, MapPin, Download } from 'lucide-react';
 
 const ContactApp = () => {
   const contactMethods = [

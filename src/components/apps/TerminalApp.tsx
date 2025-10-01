@@ -1,29 +1,34 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef } from "react";
 
 const TerminalApp = () => {
-  const [input, setInput] = useState('');
-  const [history, setHistory] = useState<Array<{ command: string; output: string }>>([
-    { command: '', output: 'Welcome to Aditya Srivastava Terminal v1.0\nType "help" for available commands.\n' }
+  const [input, setInput] = useState("");
+  const [history, setHistory] = useState<
+    Array<{ command: string; output: string }>
+  >([
+    {
+      command: "",
+      output: 'Terminal v1.0\nType "help" for available commands.\n',
+    },
   ]);
   const inputRef = useRef<HTMLInputElement>(null);
   const bottomRef = useRef<HTMLDivElement>(null);
 
   const commands = {
-    help: () => `Available commands:
-whoami       - Display user information
-work_history - Show work experience
-skills       - List technical skills
-projects     - View portfolio projects
-education    - Show educational background
-clear        - Clear terminal
-contact      - Show contact information`,
+    help: () => `available commands:
+whoami - display user information
+work_history - show work experience
+skills - list technical skills
+projects - view portfolio projects
+education - show educational background
+clear - clear terminal
+contact - show contact information`,
 
     whoami: () => `Aditya Srivastava
 Full Stack Developer skilled in React.js, Node.js, and modern web technologies.
 Passionate about building scalable applications and exploring AI/ML integration.
 Currently working at Cloud Computing Cell, AKGEC.`,
 
-    work_history: () => `Work Experience:
+    work_history: () => `work experience:
 ═══════════════════════════════════════════════
 Full Stack Developer | Cloud Computing Cell, AKGEC
 Oct 2024 - Present
@@ -32,24 +37,23 @@ Oct 2024 - Present
 • Implemented real-time features with Socket.IO
 • Collaborated on cloud-based solutions`,
 
-    skills: () => `Technical Skills:
+    skills: () => `technical skills:
 ═══════════════════════════════════════════════
-Languages:    JavaScript, TypeScript, C++, Python
-Frontend:     React.js, Next.js, Tailwind CSS, HTML5, CSS3
-Backend:      Node.js, Express.js, MongoDB, PostgreSQL
-Tools:        Git, AWS, Postman, VS Code, Docker
-Other:        Socket.IO, REST APIs, JWT, Responsive Design`,
+Languages: JavaScript, TypeScript, C++, Python
+Frontend: React.js, Next.js, Tailwind CSS, HTML5, CSS3
+Backend: Node.js, Express.js, MongoDB, PostgreSQL
+Tools: Git, AWS, Postman, VS Code, Docker
+Other: Socket.IO, REST APIs, JWT, Responsive Design`,
 
-    projects: () => `Portfolio Projects:
+    projects: () => `my projects:
 ═══════════════════════════════════════════════
-🤖 Lumina AI - AI-powered chatbot with React Native & Node.js
-📧 Sampark AI - Automated email system with Gemini API
-🌐 ION Browser - Custom mobile browser with performance optimization
 🎮 Quizaki - Real-time quiz platform with Socket.IO
-🌤️  Weather App - Live weather data with responsive design
-🎮 Sonic Boom - 2D game built with JavaScript & Kaplay JS`,
+🤖 Lumina AI - AI-powered chatbot with React Native & Node.js
+🌐 ION Browser - Custom mobile browser with performance optimization
+🎮 Sonic Boom - 2D game built with JavaScript & Kaplay JS
+📧 Sampark AI - Automated email system with Gemini API`,
 
-    education: () => `Education:
+    education: () => `education:
 ═══════════════════════════════════════════════
 Bachelor of Technology in Computer Science
 Ajay Kumar Garg Engineering College
@@ -59,47 +63,47 @@ Achievements:
 • 1st Runner-Up, DTU Hackathon (March 2024)
 • Active member of Cloud Computing Cell`,
 
-    contact: () => `Contact Information:
+    contact: () => `contact information:
 ═══════════════════════════════════════════════
 📧 Email: adityaxia9237@gmail.com
-💼 LinkedIn: /in/aditya-srivastava
-🐙 GitHub: /aditya-srivastava
-🌐 Portfolio: [Visit the main OS interface]`,
+💼 LinkedIn: https://www.linkedin.com/in/aditya-srivastava
+🐙 GitHub: https://github.com/adityasriv2317
+🌐 Portfolio: https://shikhar.is-a.dev/`,
 
     clear: () => {
-      setHistory([{ command: '', output: 'Terminal cleared.\n' }]);
-      return '';
-    }
+      setHistory([{ command: "", output: "Terminal cleared.\n" }]);
+      return "";
+    },
   };
 
   const executeCommand = (cmd: string) => {
     const trimmedCmd = cmd.trim().toLowerCase();
-    
-    if (trimmedCmd === 'clear') {
+
+    if (trimmedCmd === "clear") {
       commands.clear();
       return;
     }
 
-    let output = '';
+    let output = "";
     if (trimmedCmd in commands) {
       output = (commands as any)[trimmedCmd]();
-    } else if (trimmedCmd === '') {
-      output = '';
+    } else if (trimmedCmd === "") {
+      output = "";
     } else {
       output = `Command not found: ${trimmedCmd}\nType "help" for available commands.`;
     }
 
-    setHistory(prev => [...prev, { command: cmd, output }]);
+    setHistory((prev) => [...prev, { command: cmd, output }]);
   };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     executeCommand(input);
-    setInput('');
+    setInput("");
   };
 
   useEffect(() => {
-    bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
+    bottomRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [history]);
 
   useEffect(() => {
@@ -107,7 +111,7 @@ Achievements:
   }, []);
 
   return (
-    <div className="bg-black text-green-400 font-mono text-sm h-full flex flex-col">
+    <div className="bg-black text-green-400 font-src text-sm h-full flex flex-col">
       <div className="flex-1 p-4 overflow-auto">
         {history.map((entry, index) => (
           <div key={index} className="mb-2">
@@ -126,7 +130,6 @@ Achievements:
         ))}
         <div ref={bottomRef} />
       </div>
-      
       <form onSubmit={handleSubmit} className="p-4 border-t border-gray-700">
         <div className="flex">
           <span className="text-blue-400">aditya@portfolio:~$</span>

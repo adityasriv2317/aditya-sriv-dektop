@@ -69,6 +69,10 @@ export default {
         sm: "calc(var(--radius) - 4px)",
       },
       keyframes: {
+        blink: {
+          "0%, 100%": { opacity: "1" },
+          "50%": { opacity: "0" },
+        },
         "accordion-down": {
           from: {
             height: "0",
@@ -143,6 +147,10 @@ export default {
           "menubar-slide-down 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
         "icon-appear": "icon-appear 0.4s cubic-bezier(0.4, 0, 0.2, 1)",
         "fade-in": "fade-in 0.3s ease-out",
+        blink: "blink 1s step-end infinite",
+      },
+      fontFamily: {
+        src: ["src", "monospace"],
       },
     },
   },

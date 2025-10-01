@@ -303,3 +303,10 @@
     cursor: se-resize;
   }
 }
+
+@font-face {
+  font-family: "src";
+  src: url("/src.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+}

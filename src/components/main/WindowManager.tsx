@@ -204,7 +204,7 @@ const WindowManager = ({
         .map((window) => (
           <div
             key={window.id}
-            className="absolute border rounded-xl overflow-auto glass rounded-xl shadow-2xl pointer-events-auto animate-window-appear"
+            className="absolute border custom-scrollbar rounded-xl overflow-auto glass shadow-2xl pointer-events-auto animate-window-appear"
             style={{
               left: window.position.x,
               top: window.position.y,
@@ -216,7 +216,7 @@ const WindowManager = ({
           >
             {/* Window title bar */}
             <div
-              className={`flex items-center justify-between p-2 border-b border-white/10 select-none ${
+              className={`flex sticky top-0 backdrop-blur-md z-10 items-center justify-between py-2 px-4 border-b border-white/10 select-none ${
                 dragState.isDragging && dragState.windowId === window.id
                   ? "cursor-grabbing"
                   : "cursor-grab"
@@ -261,7 +261,7 @@ const WindowManager = ({
               </div>
             </div>
 
-            {/* Window content */}
+            {/* Window content with custom scrollbar */}
             <div className="flex-1 overflow-auto">{window.component}</div>
 
             {/* Resize handles */}

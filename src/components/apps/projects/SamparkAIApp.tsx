@@ -1,36 +1,75 @@
-import { ExternalLink, Github, Star, Code, Mail, Zap, Calendar } from 'lucide-react';
+import {
+  ExternalLink,
+  Github,
+  Star,
+  Code,
+  Mail,
+  Zap,
+  Calendar,
+} from "lucide-react";
 
 const SamparkAIApp = () => {
   const projectData = {
-    name: 'Sampark AI',
-    description: 'A full-stack web application that automates personalized email invitations using React.js, Node.js, and MongoDB. It integrates Nodemailer and Cron for scheduling and the Gemini API for intelligent content generation.',
-    techStack: ['React.js', 'Node.js', 'MongoDB', 'Nodemailer', 'Gemini API', 'Cron Jobs'],
-    features: [
-      'Automated email invitation system',
-      'AI-powered content generation',
-      'Scheduled email campaigns',
-      'Personalized email templates',
-      'MongoDB database integration',
-      'Real-time email tracking',
-      'Responsive web interface'
+    name: "Sampark AI",
+    description:
+      "A full-stack web application that automates personalized email invitations using React.js, Node.js, and MongoDB. It integrates Nodemailer and Cron for scheduling and the Gemini API for intelligent content generation.",
+    techStack: [
+      "React.js",
+      "Node.js",
+      "MongoDB",
+      "Nodemailer",
+      "Gemini API",
+      "Cron Jobs",
     ],
-    githubUrl: 'https://github.com/aditya-srivastava/sampark-ai',
-    deployedUrl: 'https://sampark-ai.vercel.app',
-    status: 'Production Ready',
-    type: 'Full-Stack Web Application'
+    features: [
+      "Automated email invitation system",
+      "AI-powered content generation",
+      "Scheduled email campaigns",
+      "Personalized email templates",
+      "MongoDB database integration",
+      "Real-time email tracking",
+      "Responsive web interface",
+    ],
+    githubUrl: "https://github.com/aditya-srivastava/sampark-ai",
+    deployedUrl: "https://sampark-ai.vercel.app",
+    status: "Production Ready",
+    type: "Full-Stack Web Application",
   };
 
   return (
-    <div className="h-full bg-gradient-to-br from-green-900 to-teal-900 text-white overflow-auto">
+    <div className="h-full bg-gradient-to-br from-blue-900 to-purple-900 text-white overflow-auto">
       <div className="p-8">
         {/* Header */}
-        <div className="flex items-center mb-8">
-          <div className="w-16 h-16 bg-gradient-to-r from-green-400 to-teal-500 rounded-xl flex items-center justify-center mr-4">
-            <Mail className="w-8 h-8 text-white" />
+        <div className="flex items-center justify-between mb-8">
+          <div className="flex items-center">
+            <img
+              src="/icons/sampark.png"
+              className="w-18 h-18 rounded-xl flex items-center justify-center mr-4"
+              alt="Sampark AI"
+            />
+            <div className="text-left">
+              <h1 className="text-3xl font-bold">{projectData.name}</h1>
+              <p className="text-purple-200">{projectData.type}</p>
+            </div>
           </div>
-          <div>
-            <h1 className="text-3xl font-bold">{projectData.name}</h1>
-            <p className="text-green-200">{projectData.type}</p>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <a
+              href={projectData.githubUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="glass p-6 rounded-2xl hover:rounded-full w-fit h-fit hover:bg-white/10 transition-all duration-200 hover:scale-105"
+            >
+              <Github className="w-6 h-6 text-gray-300 group-hover:text-white" />
+            </a>
+            <a
+              href={projectData.deployedUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="glass p-6 rounded-2xl hover:rounded-full w-fit h-fit hover:bg-white/10 transition-all duration-200 hover:scale-105"
+            >
+              <ExternalLink className="w-6 h-6 text-gray-300 group-hover:text-white" />
+            </a>
           </div>
         </div>
 
@@ -41,7 +80,9 @@ const SamparkAIApp = () => {
             Project Overview
           </h2>
           <div className="glass p-6 rounded-lg">
-            <p className="text-gray-200 leading-relaxed">{projectData.description}</p>
+            <p className="text-gray-200 leading-relaxed">
+              {projectData.description}
+            </p>
             <div className="mt-4 flex items-center space-x-4">
               <span className="px-3 py-1 bg-green-500/20 text-green-300 rounded-full text-sm">
                 {projectData.status}
@@ -94,57 +135,23 @@ const SamparkAIApp = () => {
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="glass p-6 rounded-lg">
-              <h3 className="text-lg font-semibold mb-3 text-green-400">AI Integration</h3>
+              <h3 className="text-lg font-semibold mb-3 text-green-400">
+                AI Integration
+              </h3>
               <p className="text-gray-300 text-sm">
-                Leverages Gemini API to generate personalized email content based on recipient data and context.
+                Leverages Gemini API to generate personalized email content
+                based on recipient data and context.
               </p>
             </div>
             <div className="glass p-6 rounded-lg">
-              <h3 className="text-lg font-semibold mb-3 text-teal-400">Automation</h3>
+              <h3 className="text-lg font-semibold mb-3 text-teal-400">
+                Automation
+              </h3>
               <p className="text-gray-300 text-sm">
-                Cron jobs handle scheduled email campaigns with Nodemailer for reliable email delivery.
+                Cron jobs handle scheduled email campaigns with Nodemailer for
+                reliable email delivery.
               </p>
             </div>
-          </div>
-        </section>
-
-        {/* Links */}
-        <section>
-          <h2 className="text-2xl font-semibold mb-4">Project Links</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <a
-              href={projectData.githubUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="glass p-6 rounded-lg hover:bg-white/10 transition-all hover:scale-105 group"
-            >
-              <div className="flex items-center mb-3">
-                <Github className="w-6 h-6 mr-3 text-gray-300 group-hover:text-white" />
-                <h3 className="text-lg font-semibold">Source Code</h3>
-              </div>
-              <p className="text-gray-400 text-sm">View the complete source code on GitHub</p>
-              <div className="mt-4 flex items-center text-green-300">
-                <span>View Repository</span>
-                <ExternalLink className="w-4 h-4 ml-2" />
-              </div>
-            </a>
-
-            <a
-              href={projectData.deployedUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="glass p-6 rounded-lg hover:bg-white/10 transition-all hover:scale-105 group"
-            >
-              <div className="flex items-center mb-3">
-                <Mail className="w-6 h-6 mr-3 text-teal-400 group-hover:text-teal-300" />
-                <h3 className="text-lg font-semibold">Live Application</h3>
-              </div>
-              <p className="text-gray-400 text-sm">Try the live email automation platform</p>
-              <div className="mt-4 flex items-center text-teal-300">
-                <span>Open App</span>
-                <ExternalLink className="w-4 h-4 ml-2" />
-              </div>
-            </a>
           </div>
         </section>
       </div>

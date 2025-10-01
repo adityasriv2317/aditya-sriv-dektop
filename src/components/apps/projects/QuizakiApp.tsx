@@ -1,36 +1,76 @@
-import { ExternalLink, Github, Star, Code, Users, Shield, Gamepad2 } from 'lucide-react';
+import {
+  ExternalLink,
+  Github,
+  Star,
+  Code,
+  Users,
+  Shield,
+  Gamepad2,
+} from "lucide-react";
 
 const QuizakiApp = () => {
   const projectData = {
-    name: 'Quizaki',
-    description: 'A real-time quiz platform using React.js, Tailwind CSS, and Socket.IO. Features an admin panel and Google reCAPTCHA for bot protection with live multiplayer quiz functionality.',
-    techStack: ['React.js', 'Tailwind CSS', 'Socket.IO', 'Node.js', 'Google reCAPTCHA', 'Express.js'],
-    features: [
-      'Real-time multiplayer quizzes',
-      'Admin panel for quiz management',
-      'Google reCAPTCHA bot protection',
-      'Live leaderboards',
-      'Custom quiz creation tools',
-      'Real-time chat during quizzes',
-      'Responsive design for all devices'
+    name: "Quizaki",
+    description:
+      "A real-time quiz platform using React.js, Tailwind CSS, and Socket.IO. Features an admin panel and Google reCAPTCHA for bot protection with live multiplayer quiz functionality.",
+    techStack: [
+      "React.js",
+      "Tailwind CSS",
+      "Socket.IO",
+      "Node.js",
+      "Google reCAPTCHA",
+      "Express.js",
+      "Framer Motion",
     ],
-    githubUrl: 'https://github.com/aditya-srivastava/quizaki',
-    deployedUrl: 'https://quizaki.vercel.app',
-    status: 'Production Ready',
-    type: 'Real-time Web Application'
+    features: [
+      "Real-time multiplayer quizzes",
+      "Admin panel for quiz management",
+      "Google reCAPTCHA bot protection",
+      "Live leaderboards",
+      "Custom quiz creation tools",
+      "Real-time chat during quizzes",
+      "Responsive design for all devices",
+    ],
+    githubUrl: "https://github.com/aditya-srivastava/quizaki",
+    deployedUrl: "https://quizaki.vercel.app",
+    status: "Production Ready",
+    type: "Real-time Web Application",
   };
 
   return (
-    <div className="h-full bg-gradient-to-br from-purple-900 to-pink-900 text-white overflow-auto">
+    <div className="h-full bg-gradient-to-br from-pink-900 to-red-950 text-white overflow-auto">
       <div className="p-8">
         {/* Header */}
-        <div className="flex items-center mb-8">
-          <div className="w-16 h-16 bg-gradient-to-r from-purple-400 to-pink-500 rounded-xl flex items-center justify-center mr-4">
-            <Gamepad2 className="w-8 h-8 text-white" />
+        <div className="flex items-center justify-between mb-8">
+          <div className="flex items-center">
+            <img
+              src="/icons/quizaki.svg"
+              className="w-18 h-18 rounded-xl flex items-center justify-center mr-4"
+              alt="Quizaki"
+            />
+            <div className="text-left">
+              <h1 className="text-3xl font-bold">{projectData.name}</h1>
+              <p className="text-blue-200">{projectData.type}</p>
+            </div>
           </div>
-          <div>
-            <h1 className="text-3xl font-bold">{projectData.name}</h1>
-            <p className="text-purple-200">{projectData.type}</p>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <a
+              href={projectData.githubUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="glass p-6 rounded-2xl hover:rounded-full w-fit h-fit hover:bg-white/10 transition-all duration-200 hover:scale-105"
+            >
+              <Github className="w-6 h-6 text-gray-300 group-hover:text-white" />
+            </a>
+            <a
+              href={projectData.deployedUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="glass p-6 rounded-2xl hover:rounded-full w-fit h-fit hover:bg-white/10 transition-all duration-200 hover:scale-105"
+            >
+              <ExternalLink className="w-6 h-6 text-gray-300 group-hover:text-white" />
+            </a>
           </div>
         </div>
 
@@ -41,7 +81,9 @@ const QuizakiApp = () => {
             Project Overview
           </h2>
           <div className="glass p-6 rounded-lg">
-            <p className="text-gray-200 leading-relaxed">{projectData.description}</p>
+            <p className="text-gray-200 leading-relaxed">
+              {projectData.description}
+            </p>
             <div className="mt-4 flex items-center space-x-4">
               <span className="px-3 py-1 bg-green-500/20 text-green-300 rounded-full text-sm">
                 {projectData.status}
@@ -58,15 +100,21 @@ const QuizakiApp = () => {
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="glass p-6 rounded-lg">
-              <h3 className="text-lg font-semibold mb-3 text-purple-400">Live Multiplayer</h3>
+              <h3 className="text-lg font-semibold mb-3 text-purple-400">
+                Live Multiplayer
+              </h3>
               <p className="text-gray-300 text-sm">
-                Multiple players can join quizzes simultaneously with real-time synchronization using Socket.IO.
+                Multiple players can join quizzes simultaneously with real-time
+                synchronization using Socket.IO.
               </p>
             </div>
             <div className="glass p-6 rounded-lg">
-              <h3 className="text-lg font-semibold mb-3 text-pink-400">Security</h3>
+              <h3 className="text-lg font-semibold mb-3 text-pink-400">
+                Security
+              </h3>
               <p className="text-gray-300 text-sm">
-                Google reCAPTCHA integration prevents bot interference and ensures fair gameplay.
+                Google reCAPTCHA integration prevents bot interference and
+                ensures fair gameplay.
               </p>
             </div>
           </div>
@@ -105,46 +153,6 @@ const QuizakiApp = () => {
                 </li>
               ))}
             </ul>
-          </div>
-        </section>
-
-        {/* Links */}
-        <section>
-          <h2 className="text-2xl font-semibold mb-4">Project Links</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <a
-              href={projectData.githubUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="glass p-6 rounded-lg hover:bg-white/10 transition-all hover:scale-105 group"
-            >
-              <div className="flex items-center mb-3">
-                <Github className="w-6 h-6 mr-3 text-gray-300 group-hover:text-white" />
-                <h3 className="text-lg font-semibold">Source Code</h3>
-              </div>
-              <p className="text-gray-400 text-sm">View the complete source code on GitHub</p>
-              <div className="mt-4 flex items-center text-purple-300">
-                <span>View Repository</span>
-                <ExternalLink className="w-4 h-4 ml-2" />
-              </div>
-            </a>
-
-            <a
-              href={projectData.deployedUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="glass p-6 rounded-lg hover:bg-white/10 transition-all hover:scale-105 group"
-            >
-              <div className="flex items-center mb-3">
-                <Gamepad2 className="w-6 h-6 mr-3 text-pink-400 group-hover:text-pink-300" />
-                <h3 className="text-lg font-semibold">Play Quiz</h3>
-              </div>
-              <p className="text-gray-400 text-sm">Try the live quiz platform</p>
-              <div className="mt-4 flex items-center text-pink-300">
-                <span>Start Playing</span>
-                <ExternalLink className="w-4 h-4 ml-2" />
-              </div>
-            </a>
           </div>
         </section>
       </div>

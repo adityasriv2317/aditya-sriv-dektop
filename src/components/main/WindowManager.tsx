@@ -1,5 +1,5 @@
-import { useState, useRef, useEffect } from "react";
-import { X, Minus, Square, Maximize2, Minimize2 } from "lucide-react";
+import { useState, useEffect } from "react";
+import { X, Minus, Maximize2, Minimize2 } from "lucide-react";
 import type { WindowData } from "./types";
 import { soundManager } from "@/lib/sounds";
 
@@ -13,7 +13,6 @@ interface WindowManagerProps {
 
 const WindowManager = ({
   windows,
-  activeWindow,
   onClose,
   onUpdate,
   onFocus,
@@ -232,14 +231,18 @@ const WindowManager = ({
                       onClose(window.id);
                     }}
                     className="w-3 h-3 bg-red-500 rounded-full hover:bg-red-400 transition-colors"
-                  />
+                  >
+                    <X className="w-2.5 h-2.5 font-semibold mx-auto text-black" />
+                  </button>
                   <button
                     onClick={(e) => {
                       e.stopPropagation();
                       minimizeWindow(window.id);
                     }}
                     className="w-3 h-3 bg-yellow-500 rounded-full hover:bg-yellow-400 transition-colors"
-                  />
+                  >
+                    <Minus className="w-2.5 h-2.5 font-semibold mx-auto text-black" />
+                  </button>
                   <button
                     onClick={(e) => {
                       e.stopPropagation();

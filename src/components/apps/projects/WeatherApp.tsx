@@ -1,36 +1,76 @@
-import { ExternalLink, Github, Star, Code, Cloud, Smartphone, MapPin } from 'lucide-react';
+import {
+  ExternalLink,
+  Github,
+  Star,
+  Code,
+  Cloud,
+  Smartphone,
+  MapPin,
+} from "lucide-react";
 
 const WeatherApp = () => {
   const projectData = {
-    name: 'Weather App',
-    description: 'A responsive weather app that fetches and displays live data from external APIs using React Native and Axios. Ensures cross-device compatibility with adaptive layouts and real-time weather updates.',
-    techStack: ['React Native', 'Axios', 'Weather API', 'JavaScript', 'Geolocation API', 'AsyncStorage'],
-    features: [
-      'Real-time weather data fetching',
-      'Location-based weather updates',
-      'Cross-device compatibility',
-      'Adaptive responsive layouts',
-      'Weather forecasts and alerts',
-      'Offline data caching',
-      'Beautiful weather animations'
+    name: "Weather App",
+    description:
+      "A responsive weather app that fetches and displays live data from external APIs using React Native and Axios. Ensures cross-device compatibility with adaptive layouts and real-time weather updates.",
+    techStack: [
+      "React Native",
+      "Axios",
+      "Weather API",
+      "JavaScript",
+      "Geolocation API",
+      "AsyncStorage",
     ],
-    githubUrl: 'https://github.com/aditya-srivastava/weather-app',
-    deployedUrl: 'https://weather-app-demo.vercel.app',
-    status: 'Production Ready',
-    type: 'Mobile Weather Application'
+    features: [
+      "Real-time weather data fetching",
+      "Location-based weather updates",
+      "Cross-device compatibility",
+      "Adaptive responsive layouts",
+      "Weather forecasts and alerts",
+      "Offline data caching",
+      "Beautiful weather animations",
+    ],
+    githubUrl: "https://github.com/adityasriv2317/weatherApp",
+    deployedUrl:
+      "https://github.com/adityasriv2317/weatherApp/releases/tag/pre-release",
+    status: "Production Ready",
+    type: "Mobile Weather Application",
   };
 
   return (
     <div className="h-full bg-gradient-to-br from-cyan-900 to-blue-900 text-white overflow-auto">
       <div className="p-8">
         {/* Header */}
-        <div className="flex items-center mb-8">
-          <div className="w-16 h-16 bg-gradient-to-r from-cyan-400 to-blue-500 rounded-xl flex items-center justify-center mr-4">
-            <Cloud className="w-8 h-8 text-white" />
+        <div className="flex items-center justify-between mb-8">
+          <div className="flex items-center">
+            <img
+              src="/icons/weather.png"
+              className="w-18 h-18 mr-4 rounded-xl flex items-center justify-center"
+              alt="Weather App"
+            />
+            <div className="text-left">
+              <h1 className="text-3xl font-bold">{projectData.name}</h1>
+              <p className="text-blue-200">{projectData.type}</p>
+            </div>
           </div>
-          <div>
-            <h1 className="text-3xl font-bold">{projectData.name}</h1>
-            <p className="text-cyan-200">{projectData.type}</p>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <a
+              href={projectData.githubUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="glass p-6 rounded-2xl hover:rounded-full w-fit h-fit hover:bg-white/10 transition-all duration-200 hover:scale-105"
+            >
+              <Github className="w-6 h-6 text-gray-300 group-hover:text-white" />
+            </a>
+            <a
+              href={projectData.deployedUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="glass p-6 rounded-2xl hover:rounded-full w-fit h-fit hover:bg-white/10 transition-all duration-200 hover:scale-105"
+            >
+              <ExternalLink className="w-6 h-6 text-gray-300 group-hover:text-white" />
+            </a>
           </div>
         </div>
 
@@ -41,7 +81,9 @@ const WeatherApp = () => {
             Project Overview
           </h2>
           <div className="glass p-6 rounded-lg">
-            <p className="text-gray-200 leading-relaxed">{projectData.description}</p>
+            <p className="text-gray-200 leading-relaxed">
+              {projectData.description}
+            </p>
             <div className="mt-4 flex items-center space-x-4">
               <span className="px-3 py-1 bg-green-500/20 text-green-300 rounded-full text-sm">
                 {projectData.status}
@@ -58,15 +100,21 @@ const WeatherApp = () => {
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="glass p-6 rounded-lg">
-              <h3 className="text-lg font-semibold mb-3 text-cyan-400">Weather Data</h3>
+              <h3 className="text-lg font-semibold mb-3 text-cyan-400">
+                Weather Data
+              </h3>
               <p className="text-gray-300 text-sm">
-                Integrates with external weather APIs using Axios for real-time weather information.
+                Integrates with external weather APIs using Axios for real-time
+                weather information.
               </p>
             </div>
             <div className="glass p-6 rounded-lg">
-              <h3 className="text-lg font-semibold mb-3 text-blue-400">Geolocation</h3>
+              <h3 className="text-lg font-semibold mb-3 text-blue-400">
+                Geolocation
+              </h3>
               <p className="text-gray-300 text-sm">
-                Uses device geolocation to provide location-based weather updates automatically.
+                Uses device geolocation to provide location-based weather
+                updates automatically.
               </p>
             </div>
           </div>
@@ -105,46 +153,6 @@ const WeatherApp = () => {
                 </li>
               ))}
             </ul>
-          </div>
-        </section>
-
-        {/* Links */}
-        <section>
-          <h2 className="text-2xl font-semibold mb-4">Project Links</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <a
-              href={projectData.githubUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="glass p-6 rounded-lg hover:bg-white/10 transition-all hover:scale-105 group"
-            >
-              <div className="flex items-center mb-3">
-                <Github className="w-6 h-6 mr-3 text-gray-300 group-hover:text-white" />
-                <h3 className="text-lg font-semibold">Source Code</h3>
-              </div>
-              <p className="text-gray-400 text-sm">View the complete source code on GitHub</p>
-              <div className="mt-4 flex items-center text-cyan-300">
-                <span>View Repository</span>
-                <ExternalLink className="w-4 h-4 ml-2" />
-              </div>
-            </a>
-
-            <a
-              href={projectData.deployedUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="glass p-6 rounded-lg hover:bg-white/10 transition-all hover:scale-105 group"
-            >
-              <div className="flex items-center mb-3">
-                <Cloud className="w-6 h-6 mr-3 text-blue-400 group-hover:text-blue-300" />
-                <h3 className="text-lg font-semibold">Live Demo</h3>
-              </div>
-              <p className="text-gray-400 text-sm">Try the weather app</p>
-              <div className="mt-4 flex items-center text-blue-300">
-                <span>Check Weather</span>
-                <ExternalLink className="w-4 h-4 ml-2" />
-              </div>
-            </a>
           </div>
         </section>
       </div>

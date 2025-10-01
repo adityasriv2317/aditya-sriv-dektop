@@ -1,36 +1,75 @@
-import { ExternalLink, Github, Star, Code, Globe, Zap, Smartphone } from 'lucide-react';
+import {
+  ExternalLink,
+  Github,
+  Star,
+  Code,
+  Globe,
+  Zap,
+  Smartphone,
+} from "lucide-react";
 
 const IONBrowserApp = () => {
   const projectData = {
-    name: 'ION Browser',
-    description: 'A custom mobile web browser built with React Native that features gesture-based navigation, advanced tab management, and performance optimizations that reduced memory usage by 20%.',
-    techStack: ['React Native', 'JavaScript', 'WebView', 'AsyncStorage', 'Gesture Handler'],
-    features: [
-      'Gesture-based navigation system',
-      'Advanced tab management',
-      '20% improved memory efficiency',
-      'Custom bookmarking system',
-      'Private browsing mode',
-      'Download manager integration',
-      'Dark/Light theme support'
+    name: "ION Browser",
+    description:
+      "A custom mobile web browser built with React Native that features gesture-based navigation, advanced tab management, and performance optimizations that reduced memory usage by 20%.",
+    techStack: [
+      "React Native",
+      "Expo",
+      "JavaScript",
+      "WebView",
+      "AsyncStorage",
+      "React Native Reanimated",
     ],
-    githubUrl: 'https://github.com/aditya-srivastava/ion-browser',
-    deployedUrl: 'https://ion-browser-demo.vercel.app',
-    status: 'Beta Release',
-    type: 'Mobile Browser Application'
+    features: [
+      "Modern browser experience",
+      "Gesture-based navigation system",
+      "Advanced tab management",
+      "Custom bookmarking system",
+      "Private browsing mode",
+      "Download manager integration",
+      "Dark/Light theme support",
+    ],
+    githubUrl: "https://github.com/aditya-srivastava/ion-browser",
+    deployedUrl: "https://ion-browser-demo.vercel.app",
+    status: "Beta Release",
+    type: "Mobile Browser Application",
   };
 
   return (
-    <div className="h-full bg-gradient-to-br from-orange-900 to-red-900 text-white overflow-auto">
+    <div className="h-full bg-gradient-to-br from-indigo-900 to-violet-900 text-white overflow-auto">
       <div className="p-8">
         {/* Header */}
-        <div className="flex items-center mb-8">
-          <div className="w-16 h-16 bg-gradient-to-r from-orange-400 to-red-500 rounded-xl flex items-center justify-center mr-4">
-            <Globe className="w-8 h-8 text-white" />
+        <div className="flex items-center justify-between mb-8">
+          <div className="flex items-center">
+            <img
+              src="/icons/ion.png"
+              className="w-18 h-18 rounded-xl flex items-center justify-center mr-4"
+              alt="ION Browser"
+            />
+            <div className="text-left">
+              <h1 className="text-3xl font-bold">{projectData.name}</h1>
+              <p className="text-blue-200">{projectData.type}</p>
+            </div>
           </div>
-          <div>
-            <h1 className="text-3xl font-bold">{projectData.name}</h1>
-            <p className="text-orange-200">{projectData.type}</p>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <a
+              href={projectData.githubUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="glass p-6 rounded-2xl hover:rounded-full w-fit h-fit hover:bg-white/10 transition-all duration-200 hover:scale-105"
+            >
+              <Github className="w-6 h-6 text-gray-300 group-hover:text-white" />
+            </a>
+            <a
+              href={projectData.deployedUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="glass p-6 rounded-2xl hover:rounded-full w-fit h-fit hover:bg-white/10 transition-all duration-200 hover:scale-105"
+            >
+              <ExternalLink className="w-6 h-6 text-gray-300 group-hover:text-white" />
+            </a>
           </div>
         </div>
 
@@ -41,7 +80,9 @@ const IONBrowserApp = () => {
             Project Overview
           </h2>
           <div className="glass p-6 rounded-lg">
-            <p className="text-gray-200 leading-relaxed">{projectData.description}</p>
+            <p className="text-gray-200 leading-relaxed">
+              {projectData.description}
+            </p>
             <div className="mt-4 flex items-center space-x-4">
               <span className="px-3 py-1 bg-orange-500/20 text-orange-300 rounded-full text-sm">
                 {projectData.status}
@@ -59,7 +100,9 @@ const IONBrowserApp = () => {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div className="glass p-6 rounded-lg text-center">
               <div className="text-3xl font-bold text-green-400 mb-2">20%</div>
-              <div className="text-sm text-gray-300">Memory Usage Reduction</div>
+              <div className="text-sm text-gray-300">
+                Memory Usage Reduction
+              </div>
             </div>
             <div className="glass p-6 rounded-lg text-center">
               <div className="text-3xl font-bold text-blue-400 mb-2">30%</div>
@@ -105,46 +148,6 @@ const IONBrowserApp = () => {
                 </li>
               ))}
             </ul>
-          </div>
-        </section>
-
-        {/* Links */}
-        <section>
-          <h2 className="text-2xl font-semibold mb-4">Project Links</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <a
-              href={projectData.githubUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="glass p-6 rounded-lg hover:bg-white/10 transition-all hover:scale-105 group"
-            >
-              <div className="flex items-center mb-3">
-                <Github className="w-6 h-6 mr-3 text-gray-300 group-hover:text-white" />
-                <h3 className="text-lg font-semibold">Source Code</h3>
-              </div>
-              <p className="text-gray-400 text-sm">View the complete source code on GitHub</p>
-              <div className="mt-4 flex items-center text-orange-300">
-                <span>View Repository</span>
-                <ExternalLink className="w-4 h-4 ml-2" />
-              </div>
-            </a>
-
-            <a
-              href={projectData.deployedUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="glass p-6 rounded-lg hover:bg-white/10 transition-all hover:scale-105 group"
-            >
-              <div className="flex items-center mb-3">
-                <Globe className="w-6 h-6 mr-3 text-red-400 group-hover:text-red-300" />
-                <h3 className="text-lg font-semibold">Demo</h3>
-              </div>
-              <p className="text-gray-400 text-sm">Try the browser demo</p>
-              <div className="mt-4 flex items-center text-red-300">
-                <span>Open Demo</span>
-                <ExternalLink className="w-4 h-4 ml-2" />
-              </div>
-            </a>
           </div>
         </section>
       </div>

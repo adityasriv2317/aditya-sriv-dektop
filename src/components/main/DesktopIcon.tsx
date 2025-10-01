@@ -1,5 +1,4 @@
 import { useState, useRef, useEffect } from "react";
-// import type { DesktopIconData } from '../os/types';
 import type { DesktopIconData } from "./types";
 
 interface DesktopIconProps {
@@ -57,7 +56,7 @@ const DesktopIcon = ({
   return (
     <div
       ref={iconRef}
-      className={`desktop-icon glass rounded-lg p-3 transition-all duration-200 absolute w-20 h-20 flex flex-col items-center justify-center text-center cursor-pointer select-none ${
+      className={`desktop-icon glass rounded-lg p-3 transition-all duration-200 absolute w-24 h-24 flex flex-col items-center justify-center text-center cursor-pointer select-none ${
         isDragging ? "dragging" : ""
       }`}
       style={{

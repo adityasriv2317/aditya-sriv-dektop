@@ -55,12 +55,20 @@ const Dock = ({ windows, onOpenWindow, onFocusWindow }: DockProps) => {
   ];
 
   const projectAppIcons: { [key: string]: React.ReactNode } = {
-    "lumina-ai": <Brain className="w-8 h-8" />,
-    "sampark-ai": <MailIcon className="w-8 h-8" />,
-    "ion-browser": <Globe className="w-8 h-8" />,
-    quizaki: <Gamepad2 className="w-8 h-8" />,
-    "weather-app": <Cloud className="w-8 h-8" />,
-    "sonic-boom": <Music className="w-8 h-8" />,
+    "lumina-ai": (
+      <img src="/icons/lumina.png" className="w-8 h-8" alt="Lumina AI" />
+    ),
+    "sampark-ai": (
+      <img src="/icons/sampark.png" className="w-8 h-8" alt="Sampark AI" />
+    ),
+    "ion-browser": (
+      <img src="/icons/ion.png" className="w-8 h-8" alt="ION Browser" />
+    ),
+    quizaki: <img src="/icons/quizaki.svg" className="w-8 h-8" alt="Quizaki" />,
+    "weather-app": (
+      <img src="/icons/weather.png" className="w-8 h-8 rounded-lg" alt="Weather App" />
+    ),
+    "sonic-boom": <Gamepad2 className="w-8 h-8" />,
   };
 
   // Get unique open project apps

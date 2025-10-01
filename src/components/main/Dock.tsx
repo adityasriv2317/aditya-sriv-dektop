@@ -1,17 +1,4 @@
-import {
-  Terminal,
-  User,
-  Calendar,
-  HelpCircle,
-  Mail,
-  Settings,
-  Brain,
-  Mail as MailIcon,
-  Globe,
-  Gamepad2,
-  Cloud,
-  Music,
-} from "lucide-react";
+import { Terminal, User, Settings, Mail, Gamepad2 } from "lucide-react";
 import type { WindowData } from "./types";
 import TerminalApp from "../apps/TerminalApp";
 import AboutApp from "../apps/AboutApp";
@@ -66,7 +53,11 @@ const Dock = ({ windows, onOpenWindow, onFocusWindow }: DockProps) => {
     ),
     quizaki: <img src="/icons/quizaki.svg" className="w-8 h-8" alt="Quizaki" />,
     "weather-app": (
-      <img src="/icons/weather.png" className="w-8 h-8 rounded-lg" alt="Weather App" />
+      <img
+        src="/icons/weather.png"
+        className="w-8 h-8 rounded-lg"
+        alt="Weather App"
+      />
     ),
     "sonic-boom": <Gamepad2 className="w-8 h-8" />,
   };
@@ -85,9 +76,9 @@ const Dock = ({ windows, onOpenWindow, onFocusWindow }: DockProps) => {
       return acc;
     }, [] as Array<{ appId: string; title: string; icon: React.ReactNode }>);
 
-  const isAppOpen = (appId: string) => {
-    return windows.some((w) => w.appId === appId && !w.isMinimized);
-  };
+  // const isAppOpen = (appId: string) => {
+  //   return windows.some((w) => w.appId === appId && !w.isMinimized);
+  // };
 
   const handleAppClick = (app: any) => {
     const existingWindow = windows.find((w) => w.appId === app.id);

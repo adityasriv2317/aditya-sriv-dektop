@@ -12,7 +12,7 @@ import QuizakiApp from "../apps/projects/QuizakiApp";
 import WeatherApp from "../apps/projects/WeatherApp";
 import SonicBoomApp from "../apps/projects/SonicBoomApp";
 import type { WindowData, DesktopIconData } from "./types";
-import { Brain, Mail, Globe, Gamepad2, Cloud, Music } from "lucide-react";
+import { Gamepad2 } from "lucide-react";
 import { soundManager } from "@/lib/sounds";
 
 const Desktop = () => {
@@ -39,28 +39,40 @@ const Desktop = () => {
     {
       id: "sampark-icon",
       name: "Sampark AI",
-      icon: <img src="/icons/sampark.png" className="w-12 h-12" alt="Sampark AI" />,
+      icon: (
+        <img src="/icons/sampark.png" className="w-12 h-12" alt="Sampark AI" />
+      ),
       position: { x: 50, y: 250 },
       appId: "sampark-ai",
     },
     {
       id: "ion-icon",
       name: "ION Browser",
-      icon: <img src="/icons/ion.png" className="w-12 h-12" alt="ION Browser" />,
+      icon: (
+        <img src="/icons/ion.png" className="w-12 h-12" alt="ION Browser" />
+      ),
       position: { x: 150, y: 150 },
       appId: "ion-browser",
     },
     {
       id: "quizaki-icon",
       name: "Quizaki",
-      icon: <img src="/icons/quizaki.svg" className="w-12 h-12" alt="Quizaki" />,
+      icon: (
+        <img src="/icons/quizaki.svg" className="w-12 h-12" alt="Quizaki" />
+      ),
       position: { x: 150, y: 250 },
       appId: "quizaki",
     },
     {
       id: "weather-icon",
       name: "Weather",
-      icon: <img src="/icons/weather.png" className="w-12 h-12 rounded-xl" alt="Weather" />,
+      icon: (
+        <img
+          src="/icons/weather.png"
+          className="w-12 h-12 rounded-xl"
+          alt="Weather"
+        />
+      ),
       position: { x: 250, y: 150 },
       appId: "weather-app",
     },

@@ -203,7 +203,7 @@ const WindowManager = ({
         .map((window) => (
           <div
             key={window.id}
-            className="absolute border custom-scrollbar rounded-xl overflow-auto glass shadow-2xl pointer-events-auto animate-window-appear"
+            className="absolute custom-scrollbar rounded-xl overflow-auto glass shadow-2xl pointer-events-auto animate-window-appear"
             style={{
               left: window.position.x,
               top: window.position.y,

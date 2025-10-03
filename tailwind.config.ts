@@ -153,6 +153,7 @@ export default {
       },
       fontFamily: {
         src: ["src", "monospace"],
+        suse: ["suse", "sans-serif"],
       },
     },
   },

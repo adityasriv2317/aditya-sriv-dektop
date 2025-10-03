@@ -91,7 +91,7 @@ const Dock = ({
     // Special handling for browser app
     if (app.id === "browser" && onOpenBrowser) {
       // Default URL for the browser when opened from dock
-      onOpenBrowser("https://www.google.com", "Browser");
+      onOpenBrowser("https://sonic-boomgame.vercel.app/", "ION Browser");
       return;
     }
 

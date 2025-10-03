@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState } from "react";
 import { Gamepad2 } from "lucide-react";
 
 // utils
@@ -159,49 +159,61 @@ const Desktop = () => {
     soundManager.windowOpen();
   };
 
-  const browserWindowRef = useRef<{
-    addTab: (url: string, title: string) => void;
-  } | null>(null);
+  // Manage standalone browser windows separately from regular windows
+  const [browserWindows, setBrowserWindows] = useState<
+    {
+      id: string;
+      url: string;
+      title: string;
+      isVisible: boolean;
+      component: React.ReactNode;
+    }[]
+  >([]);
 
   const openBrowser = (url: string, title: string) => {
-    const existingWindow = windows.find((w) => w.appId === "browser");
+    // Check if a browser window with this URL already exists
+    const existingBrowser = browserWindows.find((bw) => bw.url === url);
 
-    // If browser window already exists, add a new tab or activate existing one
-    if (existingWindow) {
-      if (existingWindow.isMinimized) {
-        updateWindow(existingWindow.id, { isMinimized: false });
+    if (existingBrowser) {
+      // If it exists but is hidden, make it visible
+      if (!existingBrowser.isVisible) {
+        setBrowserWindows((prev) =>
+          prev.map((bw) =>
+            bw.id === existingBrowser.id ? { ...bw, isVisible: true } : bw
+          )
+        );
         soundManager.windowOpen();
-      }
-      setActiveWindow(existingWindow.id);
-
-      // Add a new tab if the browser window exists
-      if (browserWindowRef.current) {
-        browserWindowRef.current.addTab(url, title);
       }
       return;
     }
 
     // Otherwise create a new browser window
-    const windowId = `window-${Date.now()}`;
-    const newWindow: WindowData = {
-      id: windowId,
-      appId: "browser",
-      title: "Browser",
-      component: <BrowserApp 
-        initialUrl={url} 
-        initialTitle={title} 
-        onClose={() => closeWindow(windowId)} 
-        ref={browserWindowRef} 
-      />,
-      position: { x: 100 + windows.length * 30, y: 100 + windows.length * 30 },
-      size: { width: 900, height: 700 },
-      isMinimized: false,
-      zIndex: windows.length + 1,
-      isResizable: true,
-    };
+    const newBrowserId = `browser-${Date.now()}`;
+    const browserComponent = (
+      <BrowserApp
+        initialUrl={url}
+        initialTitle={title}
+        onClose={() => {
+          setBrowserWindows((prev) =>
+            prev.map((bw) =>
+              bw.id === newBrowserId ? { ...bw, isVisible: false } : bw
+            )
+          );
+          soundManager.windowClose();
+        }}
+      />
+    );
 
-    setWindows((prev) => [...prev, newWindow]);
-    setActiveWindow(newWindow.id);
+    setBrowserWindows((prev) => [
+      ...prev,
+      {
+        id: newBrowserId,
+        url,
+        title,
+        isVisible: true,
+        component: browserComponent,
+      },
+    ]);
     soundManager.windowOpen();
   };
 
@@ -344,6 +356,15 @@ const Desktop = () => {
         onFocusWindow={focusWindow}
         onOpenBrowser={openBrowser}
       />
+
+      {/* Standalone Browser Windows */}
+      {browserWindows
+        .filter((bw) => bw.isVisible)
+        .map((browser) => (
+          <div key={browser.id} className="relative z-40">
+            {browser.component}
+          </div>
+        ))}
 
       {/* Context Menu */}
       {contextMenu && (

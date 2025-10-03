@@ -169,14 +169,14 @@ const Desktop = () => {
     component: React.ReactNode;
     ref: React.RefObject<BrowserAppRef | null>;
   }
-  
+
   // Manage standalone browser windows separately from regular windows
   const [browserWindows, setBrowserWindows] = useState<BrowserWindowData[]>([]);
 
   const openBrowser = (url: string, title: string) => {
     // If any browser window is already visible, use it to open a new tab
-    const anyVisibleBrowser = browserWindows.find(bw => bw.isVisible);
-    
+    const anyVisibleBrowser = browserWindows.find((bw) => bw.isVisible);
+
     if (anyVisibleBrowser && anyVisibleBrowser.ref.current) {
       // Add a new tab to the existing browser window
       anyVisibleBrowser.ref.current.addTab(url, title);
@@ -184,23 +184,23 @@ const Desktop = () => {
     }
 
     // Check if we have a hidden browser we can reuse
-    const anyHiddenBrowser = browserWindows.find(bw => !bw.isVisible);
-    
+    const anyHiddenBrowser = browserWindows.find((bw) => !bw.isVisible);
+
     if (anyHiddenBrowser) {
       // Make it visible and open the URL in a new tab
-      setBrowserWindows(prev =>
-        prev.map(bw =>
+      setBrowserWindows((prev) =>
+        prev.map((bw) =>
           bw.id === anyHiddenBrowser.id ? { ...bw, isVisible: true } : bw
         )
       );
-      
+
       // If the browser has a ref with the addTab method, use it
       if (anyHiddenBrowser.ref.current) {
         setTimeout(() => {
           anyHiddenBrowser.ref.current?.addTab(url, title);
         }, 100); // Small delay to ensure the browser is visible first
       }
-      
+
       soundManager.windowOpen();
       return;
     }
@@ -208,15 +208,15 @@ const Desktop = () => {
     // Otherwise create a new browser window
     const newBrowserId = `browser-${Date.now()}`;
     const browserRef = React.createRef<BrowserAppRef>();
-    
+
     const browserComponent = (
       <BrowserApp
         initialUrl={url}
         initialTitle={title}
         ref={browserRef}
         onClose={() => {
-          setBrowserWindows(prev =>
-            prev.map(bw =>
+          setBrowserWindows((prev) =>
+            prev.map((bw) =>
               bw.id === newBrowserId ? { ...bw, isVisible: false } : bw
             )
           );
@@ -225,7 +225,7 @@ const Desktop = () => {
       />
     );
 
-    setBrowserWindows(prev => [
+    setBrowserWindows((prev) => [
       ...prev,
       {
         id: newBrowserId,
@@ -233,7 +233,7 @@ const Desktop = () => {
         title,
         isVisible: true,
         component: browserComponent,
-        ref: browserRef
+        ref: browserRef,
       },
     ]);
     soundManager.windowOpen();
@@ -379,7 +379,7 @@ const Desktop = () => {
         onOpenBrowser={openBrowser}
       />
 
-      {/* Standalone Browser Windows */}
+      {/* Browser */}
       {browserWindows
         .filter((bw) => bw.isVisible)
         .map((browser) => (

@@ -4,7 +4,15 @@ import React, {
   forwardRef,
   useImperativeHandle,
 } from "react";
-import { RefreshCw, Plus, X, Minus, Maximize2, Minimize2 } from "lucide-react";
+import {
+  RefreshCw,
+  Plus,
+  X,
+  Minus,
+  Maximize2,
+  Minimize2,
+  Globe,
+} from "lucide-react";
 
 // --- TYPE DEFINITIONS ---
 
@@ -15,7 +23,7 @@ interface Tab {
   isLoading: boolean;
 }
 
-interface StandaloneBrowserAppProps {
+interface BrowserAppProps {
   initialUrl: string;
   initialTitle?: string;
   onClose: () => void;
@@ -26,7 +34,7 @@ export interface BrowserAppRef {
   addTab: (url: string, title: string) => void;
 }
 
-const BrowserApp = forwardRef<BrowserAppRef, StandaloneBrowserAppProps>(
+const BrowserApp = forwardRef<BrowserAppRef, BrowserAppProps>(
   (
     { initialUrl, initialTitle = "Browser", onClose, isResizable = true },
     ref
@@ -309,7 +317,7 @@ const BrowserApp = forwardRef<BrowserAppRef, StandaloneBrowserAppProps>(
           onClick={() => setIsMinimized(false)}
           title={activeTab?.title || "Browser"}
         >
-          <img src="/icons/ionpc.png" className="w-6 h-6" alt="Browser" />
+          <Globe className="w-5 h-5 text-white/90" />
         </div>
       );
     }
@@ -341,7 +349,7 @@ const BrowserApp = forwardRef<BrowserAppRef, StandaloneBrowserAppProps>(
       >
         {/* Window Title Bar */}
         <div
-          className={`flex sticky top-0 backdrop-blur-md z-10 items-center justify-between py-2 px-4 select-none bg-gray-900/80 border-b border-white/10 ${
+          className={`flex sticky top-0  items-center justify-between py-0.5 px-4 select-none ${
             dragState.isDragging ? "cursor-grabbing" : "cursor-grab"
           }`}
           onMouseDown={handleDragStart}
@@ -358,14 +366,14 @@ const BrowserApp = forwardRef<BrowserAppRef, StandaloneBrowserAppProps>(
                   className="w-4 h-4 bg-red-500 rounded-full hover:bg-red-400 flex items-center justify-center transition-all hover:scale-105"
                   aria-label="Close window"
                 >
-                  <X className="w-2 h-2 opacity-0 group-hover:opacity-100 text-white" />
+                  <X className="w-3 h-3 opacity-0 group-hover:opacity-100 text-black" />
                 </button>
                 <button
                   onClick={minimizeWindow}
                   className="w-4 h-4 bg-yellow-500 rounded-full hover:bg-yellow-400 flex items-center justify-center transition-all hover:scale-105"
                   aria-label="Minimize window"
                 >
-                  <Minus className="w-2 h-2 opacity-0 group-hover:opacity-100 text-white" />
+                  <Minus className="w-3 h-3 opacity-0 group-hover:opacity-100 text-black" />
                 </button>
                 <button
                   onClick={maximizeWindow}
@@ -379,66 +387,56 @@ const BrowserApp = forwardRef<BrowserAppRef, StandaloneBrowserAppProps>(
                   }
                 >
                   {isMaximized ? (
-                    <Minimize2 className="w-2 h-2 text-white" />
+                    <Minimize2 className="w-3 h-3 text-black" />
                   ) : (
-                    <Maximize2 className="w-2 h-2 opacity-0 group-hover:opacity-100 text-white" />
+                    <Maximize2 className="w-3 h-3 opacity-0 group-hover:opacity-100 text-black" />
                   )}
                 </button>
               </div>
-              <h3 className="text-white font-medium text-sm truncate max-w-[200px] ml-2">
-                {activeTab?.title || "Browser"}
-              </h3>
+              {/* Tab Bar */}
+              <div className="flex items-center" onDoubleClick={maximizeWindow}>
+                <div className="flex-1 rounded-l-2xl rounded-r-2xl flex items-center overflow-x-auto hide-scrollbar">
+                  {tabs.map((tab) => (
+                    <div
+                      key={tab.id}
+                      onClick={() => switchTab(tab.id)}
+                      className={`flex items-center px-3 py-2 min-w-[120px] max-w-[200px] border-r border-white/10 cursor-pointer ${
+                        tab.id === activeTabId
+                          ? "bg-black/25"
+                          : "bg-gray-900/10 hover:bg-gray-800/50"
+                      }`}
+                    >
+                      <div className="flex-1 text-xs text-white/90 truncate">
+                        {tab.title}
+                      </div>
+                      <button
+                        onClick={(e) => closeTab(tab.id, e)}
+                        className="ml-2 p-0.5 rounded-full hover:bg-white/20"
+                      >
+                        <X className="w-3 h-3 text-white/60" />
+                      </button>
+                    </div>
+                  ))}
+                </div>
+                <button
+                  onClick={() => addNewTab()}
+                  className="p-1 bg-black/20 hover:bg-black/40 rounded-full ml-0.5"
+                  aria-label="New Tab"
+                >
+                  <Plus className="w-4 h-4 text-white/70" />
+                </button>
+              </div>
             </div>
 
-            {/* This empty div helps with drag area */}
-            <div
-              className="flex-grow h-full"
-              onMouseDown={handleDragStart}
-            ></div>
+            {/* Drag area */}
+            <div className="flex-grow h-full" onMouseDown={handleDragStart} />
           </div>
         </div>
 
         {/* Browser Content Area */}
         <div className="flex flex-col flex-1 h-full min-h-0">
-          {/* Tab Bar */}
-          <div
-            className="bg-gray-900/90 border-b border-white/10 flex items-center"
-            onDoubleClick={maximizeWindow}
-          >
-            <div className="flex-1 flex items-center overflow-x-auto hide-scrollbar">
-              {tabs.map((tab) => (
-                <div
-                  key={tab.id}
-                  onClick={() => switchTab(tab.id)}
-                  className={`flex items-center px-3 py-2 min-w-[120px] max-w-[200px] border-r border-white/10 cursor-pointer ${
-                    tab.id === activeTabId
-                      ? "bg-gray-800/80"
-                      : "bg-gray-900/30 hover:bg-gray-800/50"
-                  }`}
-                >
-                  <div className="flex-1 text-xs text-white/90 truncate">
-                    {tab.title}
-                  </div>
-                  <button
-                    onClick={(e) => closeTab(tab.id, e)}
-                    className="ml-2 p-0.5 rounded-full hover:bg-white/20"
-                  >
-                    <X className="w-3 h-3 text-white/60" />
-                  </button>
-                </div>
-              ))}
-            </div>
-            <button
-              onClick={() => addNewTab()}
-              className="p-1.5 hover:bg-white/10"
-              aria-label="New Tab"
-            >
-              <Plus className="w-4 h-4 text-white/70" />
-            </button>
-          </div>
-
           {/* Iframe Content */}
-          <div className="flex-1 relative custom-scrollbar h-full overflow-auto">
+          <div className="flex-1 relative rounded-xl custom-scrollbar h-full overflow-auto">
             {isLoading && (
               <div className="absolute inset-0 flex items-center justify-center bg-black/30 z-10">
                 <div className="animate-spin w-8 h-8 border-2 border-white/10 border-t-white/90 rounded-full"></div>

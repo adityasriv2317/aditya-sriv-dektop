@@ -1,5 +1,15 @@
 import { useState, useEffect } from "react";
-import { X, Minus, Maximize2, Minimize2 } from "lucide-react";
+import {
+  X,
+  Minus,
+  Maximize2,
+  Minimize2,
+  Mail,
+  Terminal,
+  User,
+  Gamepad2,
+  Settings,
+} from "lucide-react";
 import type { WindowData } from "./types";
 import { soundManager } from "@/lib/sounds";
 
@@ -60,10 +70,34 @@ const WindowManager = ({
     });
   };
 
+  const minimizeIcons = {
+    terminal: <Terminal className="w-5 h-5" />,
+    about: <User className="w-5 h-5" />,
+    contact: <Mail className="w-5 h-5" />,
+    settings: <Settings className="w-5 h-5" />,
+    "ion-browser": (
+      <img src="/icons/ion.png" className="w-5 h-5" alt="ION Browser" />
+    ),
+    "lumina-ai": (
+      <img src="/icons/lumina.png" className="w-5 h-5" alt="Lumina AI" />
+    ),
+    "sampark-ai": (
+      <img src="/icons/sampark.png" className="w-5 h-5" alt="Sampark AI" />
+    ),
+    "weather-app": (
+      <img
+        src="/icons/weather.png"
+        className="w-5 h-5 rounded-md"
+        alt="Weather"
+      />
+    ),
+    "sonic-boom": <Gamepad2 className="w-5 h-5" />,
+    quizaki: <img src="/icons/quizaki.svg" className="w-5 h-5" alt="Quizaki" />,
+  };
+
   // Handle window resize for maximized windows
   useEffect(() => {
     const handleResize = () => {
-      // Update all maximized windows to fit the new screen size
       windows.forEach((window) => {
         if (window.isMaximized) {
           onUpdate(window.id, {
@@ -83,7 +117,6 @@ const WindowManager = ({
     };
   }, [windows, onUpdate]);
 
-  // Use document-level event listeners for smoother dragging
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
       if (dragState.isDragging && dragState.windowId) {
@@ -187,21 +220,18 @@ const WindowManager = ({
   };
 
   const minimizeWindow = (windowId: string) => {
-    // Apply minimize animation class first
     const window = windows.find((w) => w.id === windowId);
     if (window) {
-      // First update with animation class
       onUpdate(windowId, {
         minimizeAnimation: true,
       });
 
-      // Then after animation delay, actually minimize
       setTimeout(() => {
         onUpdate(windowId, {
           isMinimized: true,
           minimizeAnimation: false,
         });
-      }, 200); // Match the animation duration
+      }, 200);
     }
 
     soundManager.windowMinimize();
@@ -251,9 +281,13 @@ const WindowManager = ({
               title={window.title}
               style={{ left: `${4 + index * 12}px` }}
             >
-              <div className="text-white font-semibold text-sm">
+              {/* <div className="text-white font-semibold text-sm">
                 {window.title.charAt(0)}
-              </div>
+              </div> */}
+
+              {minimizeIcons[window.appId as keyof typeof minimizeIcons] || (
+                <X className="w-5 h-5" />
+              )}
             </div>
           ))}
       </div>
@@ -265,7 +299,7 @@ const WindowManager = ({
         .map((window) => (
           <div
             key={window.id}
-            className={`absolute custom-scrollbar overflow-hidden glass shadow-2xl pointer-events-auto ${
+            className={`absolute custom-scrollbar overflow-auto glass shadow-2xl pointer-events-auto ${
               window.minimizeAnimation
                 ? "animate-minimize"
                 : window.isMaximized
@@ -294,7 +328,7 @@ const WindowManager = ({
           >
             {/* Window title bar */}
             <div
-              className={`flex sticky top-0 backdrop-blur-md z-10 items-center justify-between py-2 px-4 select-none bg-gray-900/80 border-b border-white/10 ${
+              className={`flex sticky top-0 backdrop-blur-md z-10 items-center justify-between py-2 px-4 select-none border-b border-white/10 ${
                 dragState.isDragging && dragState.windowId === window.id
                   ? "cursor-grabbing"
                   : "cursor-grab"
@@ -317,7 +351,7 @@ const WindowManager = ({
                     className="w-4 h-4 bg-red-500 rounded-full hover:bg-red-400 flex items-center justify-center transition-all hover:scale-105"
                     aria-label="Close window"
                   >
-                    <X className="w-2 h-2 opacity-0 group-hover:opacity-100 text-white" />
+                    <X className="w-3 h-3 opacity-0 group-hover:opacity-100 text-white" />
                   </button>
                   <button
                     onClick={(e) => {
@@ -328,7 +362,7 @@ const WindowManager = ({
                     className="w-4 h-4 bg-yellow-500 rounded-full hover:bg-yellow-400 flex items-center justify-center transition-all hover:scale-105"
                     aria-label="Minimize window"
                   >
-                    <Minus className="w-2 h-2 opacity-0 group-hover:opacity-100 text-white" />
+                    <Minus className="w-3 h-3 opacity-0 group-hover:opacity-100 text-white" />
                   </button>
                   <button
                     onClick={(e) => {
@@ -345,9 +379,9 @@ const WindowManager = ({
                     }
                   >
                     {window.isMaximized ? (
-                      <Minimize2 className="w-2 h-2 text-white" />
+                      <Minimize2 className="w-3 h-3 text-white" />
                     ) : (
-                      <Maximize2 className="w-2 h-2 opacity-0 group-hover:opacity-100 text-white" />
+                      <Maximize2 className="w-3 h-3 opacity-0 group-hover:opacity-100 text-white" />
                     )}
                   </button>
                 </div>

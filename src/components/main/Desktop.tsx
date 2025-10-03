@@ -1,9 +1,18 @@
-import { useState } from "react";
-import MenuBar from "./MenuBar";
-import Dock from "./Dock";
+import React, { useState, useRef } from "react";
+import { Gamepad2 } from "lucide-react";
+
+// utils
+import type { WindowData, DesktopIconData } from "./types";
+import { soundManager } from "@/lib/sounds";
+import DesktopIcon from "./DesktopIcon";
+
+// system components
 import WindowManager from "./WindowManager";
 import ContextMenu from "./ContextMenu";
-import DesktopIcon from "./DesktopIcon";
+import MenuBar from "./MenuBar";
+import Dock from "./Dock";
+
+// apps
 import SettingsApp from "../apps/SettingsApp";
 import LuminaAIApp from "../apps/projects/LuminaAIApp";
 import SamparkAIApp from "../apps/projects/SamparkAIApp";
@@ -11,9 +20,7 @@ import IONBrowserApp from "../apps/projects/IONBrowserApp";
 import QuizakiApp from "../apps/projects/QuizakiApp";
 import WeatherApp from "../apps/projects/WeatherApp";
 import SonicBoomApp from "../apps/projects/SonicBoomApp";
-import type { WindowData, DesktopIconData } from "./types";
-import { Gamepad2 } from "lucide-react";
-import { soundManager } from "@/lib/sounds";
+import BrowserApp from "../apps/BrowserApp";
 
 const Desktop = () => {
   const [windows, setWindows] = useState<WindowData[]>([]);
@@ -152,6 +159,52 @@ const Desktop = () => {
     soundManager.windowOpen();
   };
 
+  const browserWindowRef = useRef<{
+    addTab: (url: string, title: string) => void;
+  } | null>(null);
+
+  const openBrowser = (url: string, title: string) => {
+    const existingWindow = windows.find((w) => w.appId === "browser");
+
+    // If browser window already exists, add a new tab or activate existing one
+    if (existingWindow) {
+      if (existingWindow.isMinimized) {
+        updateWindow(existingWindow.id, { isMinimized: false });
+        soundManager.windowOpen();
+      }
+      setActiveWindow(existingWindow.id);
+
+      // Add a new tab if the browser window exists
+      if (browserWindowRef.current) {
+        browserWindowRef.current.addTab(url, title);
+      }
+      return;
+    }
+
+    // Otherwise create a new browser window
+    const windowId = `window-${Date.now()}`;
+    const newWindow: WindowData = {
+      id: windowId,
+      appId: "browser",
+      title: "Browser",
+      component: <BrowserApp 
+        initialUrl={url} 
+        initialTitle={title} 
+        onClose={() => closeWindow(windowId)} 
+        ref={browserWindowRef} 
+      />,
+      position: { x: 100 + windows.length * 30, y: 100 + windows.length * 30 },
+      size: { width: 900, height: 700 },
+      isMinimized: false,
+      zIndex: windows.length + 1,
+      isResizable: true,
+    };
+
+    setWindows((prev) => [...prev, newWindow]);
+    setActiveWindow(newWindow.id);
+    soundManager.windowOpen();
+  };
+
   const closeWindow = (windowId: string) => {
     setWindows((prev) => prev.filter((w) => w.id !== windowId));
     setActiveWindow(null);
@@ -275,7 +328,7 @@ const Desktop = () => {
         <p className="text-xl text-white/70">Full Stack Developer</p>
       </div>
 
-      <MenuBar />
+      <MenuBar onOpenWindow={openWindow} onOpenBrowser={openBrowser} />
 
       <WindowManager
         windows={windows}
@@ -289,6 +342,7 @@ const Desktop = () => {
         windows={windows}
         onOpenWindow={openWindow}
         onFocusWindow={focusWindow}
+        onOpenBrowser={openBrowser}
       />
 
       {/* Context Menu */}

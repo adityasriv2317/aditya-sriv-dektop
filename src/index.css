@@ -26,6 +26,15 @@
   background: transparent;
 }
 
+/* Hide scrollbar but keep functionality */
+.hide-scrollbar {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
 @layer base {
   :root {
     /* OS Theme Colors */

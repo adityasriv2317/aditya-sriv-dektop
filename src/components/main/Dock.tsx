@@ -1,4 +1,4 @@
-import { Terminal, User, Settings, Mail, Gamepad2 } from "lucide-react";
+import { Terminal, User, Settings, Mail, Gamepad2, Globe } from "lucide-react";
 import type { WindowData } from "./types";
 import TerminalApp from "../apps/TerminalApp";
 import AboutApp from "../apps/AboutApp";
@@ -12,9 +12,15 @@ interface DockProps {
     component?: React.ReactNode
   ) => void;
   onFocusWindow: (windowId: string) => void;
+  onOpenBrowser?: (url: string, title: string) => void;
 }
 
-const Dock = ({ windows, onOpenWindow, onFocusWindow }: DockProps) => {
+const Dock = ({
+  windows,
+  onOpenWindow,
+  onFocusWindow,
+  onOpenBrowser,
+}: DockProps) => {
   const systemApps = [
     {
       id: "terminal",
@@ -38,6 +44,11 @@ const Dock = ({ windows, onOpenWindow, onFocusWindow }: DockProps) => {
       id: "settings",
       name: "Preferences",
       icon: <Settings className="w-8 h-8" />,
+    },
+    {
+      id: "browser",
+      name: "ION Browser",
+      icon: <Globe className="w-8 h-8" />,
     },
   ];
 
@@ -76,11 +87,14 @@ const Dock = ({ windows, onOpenWindow, onFocusWindow }: DockProps) => {
       return acc;
     }, [] as Array<{ appId: string; title: string; icon: React.ReactNode }>);
 
-  // const isAppOpen = (appId: string) => {
-  //   return windows.some((w) => w.appId === appId && !w.isMinimized);
-  // };
-
   const handleAppClick = (app: any) => {
+    // Special handling for browser app
+    if (app.id === "browser" && onOpenBrowser) {
+      // Default URL for the browser when opened from dock
+      onOpenBrowser("https://www.google.com", "Browser");
+      return;
+    }
+
     const existingWindow = windows.find((w) => w.appId === app.id);
 
     if (existingWindow) {

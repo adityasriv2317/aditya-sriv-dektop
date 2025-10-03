@@ -2,7 +2,12 @@ import { useState } from "react";
 import { Settings, Wifi, Battery, Volume2 } from "lucide-react";
 import ControlCenter from "./ControlCenter";
 
-const MenuBar = () => {
+interface MenuBarProps {
+  onOpenWindow: (appId: string, title: string, component?: React.ReactNode) => void;
+  onOpenBrowser?: (url: string, title: string) => void;
+}
+
+const MenuBar: React.FC<MenuBarProps> = ({ onOpenWindow, onOpenBrowser }) => {
   const [showControlCenter, setShowControlCenter] = useState(false);
   const [currentTime, setCurrentTime] = useState(new Date());
 
@@ -63,7 +68,11 @@ const MenuBar = () => {
       </div>
 
       {showControlCenter && (
-        <ControlCenter onClose={() => setShowControlCenter(false)} />
+        <ControlCenter 
+          onClose={() => setShowControlCenter(false)}
+          onOpenWindow={onOpenWindow}
+          onOpenBrowser={onOpenBrowser} 
+        />
       )}
     </>
   );

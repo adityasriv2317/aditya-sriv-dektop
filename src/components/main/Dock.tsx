@@ -30,13 +30,13 @@ const Dock = ({ windows, onOpenWindow, onFocusWindow }: DockProps) => {
     },
     {
       id: "contact",
-      name: "Contact",
+      name: "Contact Me",
       icon: <Mail className="w-8 h-8" />,
       component: <ContactApp />,
     },
     {
       id: "settings",
-      name: "Settings",
+      name: "Preferences",
       icon: <Settings className="w-8 h-8" />,
     },
   ];
@@ -111,27 +111,27 @@ const Dock = ({ windows, onOpenWindow, onFocusWindow }: DockProps) => {
 
   return (
     <div className="fixed bottom-4 left-1/2 transform -translate-x-1/2 z-40">
-      <div className="dock glass rounded-2xl px-4 py-3 flex items-center space-x-2">
+      <div className=" glass rounded-2xl px-4 py-3 flex items-center space-x-2">
         {/* System Apps */}
         {systemApps.map((app) => (
           <div key={app.id} className="relative group">
             <button
               onClick={() => handleAppClick(app)}
-              className="p-3 rounded-xl glass-hover transition-all duration-200 hover:scale-110 relative cursor-pointer"
+              className="p-3 rounded-xl glass-hover transition-all group duration-200 hover:scale-110 relative cursor-pointer"
               title={app.name}
             >
-              <div className="text-white/80 group-hover:text-white transition-colors">
+              <div className="text-white/90 group-hover:text-white transition-colors">
                 {app.icon}
               </div>
 
               {/* Active indicator */}
               {windows.some((w) => w.appId === app.id && !w.isMinimized) && (
-                <div className="absolute -bottom-1 left-1/2 transform -translate-x-1/2 w-1 h-1 bg-white rounded-full animate-pulse" />
+                <div className="absolute -bottom-1 left-1/2 transform -translate-x-1/2 w-4 h-1 bg-white/80 group-hover:bg-white rounded-full" />
               )}
             </button>
 
             {/* Tooltip */}
-            <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-2 py-1 bg-black/80 text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap">
+            <div className="absolute glass bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-2 py-1 text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap">
               {app.name}
             </div>
           </div>

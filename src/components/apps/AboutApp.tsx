@@ -55,7 +55,7 @@ const AboutApp = () => {
   ];
 
   return (
-    <div className="h-full overflow-auto bg-gradient-to-br from-gray-900 to-gray-800 text-white">
+    <div className="h-full rounded-t-xl overflow-auto glass text-white">
       <div className="p-8">
         {/* Header */}
         <div className="flex items-center justify-center gap-8 mb-8">
@@ -66,8 +66,8 @@ const AboutApp = () => {
           />
           <div>
             <h1 className="text-3xl font-bold mb-2">Aditya Srivastava</h1>
-            <p className="text-xl text-gray-300 mb-4">Full Stack Developer</p>
-            <div className="flex items-center justify-center text-gray-400">
+            <p className="text-xl text-gray-300 mb-2">Full Stack Developer</p>
+            <div className="flex items-center justify-center text-gray-300">
               <MapPin className="w-4 h-4 mr-1" />
               <span>Ghaziabad, India</span>
             </div>

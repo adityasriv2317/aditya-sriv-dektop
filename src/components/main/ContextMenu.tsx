@@ -1,14 +1,5 @@
-import { useState, useEffect } from 'react';
-import { 
-  RefreshCw, 
-  FolderPlus, 
-  FileText, 
-  Image, 
-  Settings, 
-  Info,
-  Monitor,
-  Palette
-} from 'lucide-react';
+import { useState, useEffect } from "react";
+import { RefreshCw, FileText, Settings, Info, HelpCircle } from "lucide-react";
 
 interface ContextMenuProps {
   position: { x: number; y: number };
@@ -40,49 +31,32 @@ const ContextMenu = ({ position, onClose, onAction }: ContextMenuProps) => {
   const menuItems = [
     {
       icon: <RefreshCw className="w-4 h-4" />,
-      label: 'Refresh Desktop',
-      action: 'refresh',
-      shortcut: 'F5'
+      label: "Refresh Desktop",
+      action: "refresh",
+      shortcut: "F5",
     },
-    { type: 'separator' },
-    {
-      icon: <FolderPlus className="w-4 h-4" />,
-      label: 'New Folder',
-      action: 'new-folder'
-    },
+    { type: "separator" },
     {
       icon: <FileText className="w-4 h-4" />,
-      label: 'New Document',
-      action: 'new-document'
-    },
-    { type: 'separator' },
-    {
-      icon: <Image className="w-4 h-4" />,
-      label: 'Change Wallpaper',
-      action: 'wallpaper'
-    },
-    {
-      icon: <Palette className="w-4 h-4" />,
-      label: 'Personalize',
-      action: 'personalize'
-    },
-    { type: 'separator' },
-    {
-      icon: <Monitor className="w-4 h-4" />,
-      label: 'Display Settings',
-      action: 'display'
+      label: "New Document",
+      action: "new-document",
     },
     {
       icon: <Settings className="w-4 h-4" />,
-      label: 'System Preferences',
-      action: 'settings'
+      label: "System Preferences",
+      action: "settings",
     },
-    { type: 'separator' },
+    { type: "separator" },
+    {
+      icon: <HelpCircle className="w-4 h-4" />,
+      label: "Help",
+      action: "help",
+    },
     {
       icon: <Info className="w-4 h-4" />,
-      label: 'About Aditya OS',
-      action: 'about'
-    }
+      label: "About Aditya OS",
+      action: "about",
+    },
   ];
 
   const handleItemClick = (action: string) => {
@@ -96,19 +70,13 @@ const ContextMenu = ({ position, onClose, onAction }: ContextMenuProps) => {
       style={{
         left: adjustedPosition.x,
         top: adjustedPosition.y,
-        background: 'hsla(0, 0%, 8%, 0.95)',
-        backdropFilter: 'blur(20px) saturate(180%)',
+        backdropFilter: "blur(20px) saturate(180%)",
       }}
       onClick={(e) => e.stopPropagation()}
     >
       {menuItems.map((item, index) => {
-        if (item.type === 'separator') {
-          return (
-            <div
-              key={index}
-              className="h-px bg-white/10 mx-2 my-1"
-            />
-          );
+        if (item.type === "separator") {
+          return <div key={index} className="h-px bg-white/10 mx-2 my-1" />;
         }
 
         return (

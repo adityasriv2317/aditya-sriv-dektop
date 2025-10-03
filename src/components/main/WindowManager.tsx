@@ -215,7 +215,7 @@ const WindowManager = ({
           >
             {/* Window title bar */}
             <div
-              className={`flex sticky top-0 backdrop-blur-md z-10 items-center justify-between py-2 px-4 border-b border-white/10 select-none ${
+              className={`flex sticky top-0 backdrop-blur-md z-10 items-center justify-between py-2 px-4  select-none ${
                 dragState.isDragging && dragState.windowId === window.id
                   ? "cursor-grabbing"
                   : "cursor-grab"

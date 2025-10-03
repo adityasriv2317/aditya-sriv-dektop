@@ -36,7 +36,7 @@ const SamparkAIApp = () => {
   };
 
   return (
-    <div className="h-full bg-gradient-to-br from-blue-900 to-purple-900 text-white overflow-auto">
+    <div className="h-full rounded-t-xl bg-gradient-to-br from-blue-900 to-purple-900 text-white overflow-auto">
       <div className="p-8">
         {/* Header */}
         <div className="flex items-center justify-between mb-8">

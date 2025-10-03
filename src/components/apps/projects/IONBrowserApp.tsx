@@ -36,7 +36,7 @@ const IONBrowserApp = () => {
   };
 
   return (
-    <div className="h-full bg-gradient-to-br from-indigo-900 to-violet-900 text-white overflow-auto">
+    <div className="h-full rounded-t-xl bg-gradient-to-br from-indigo-900 to-violet-900 text-white overflow-auto">
       <div className="p-8">
         {/* Header */}
         <div className="flex items-center justify-between mb-8">

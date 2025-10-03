@@ -205,23 +205,26 @@ const Desktop = () => {
         // Refresh desktop
         window.location.reload();
         break;
-      case "new-folder":
-        alert("New Folder feature - Coming Soon!");
-        break;
       case "new-document":
         alert("New Document feature - Coming Soon!");
         break;
-      case "wallpaper":
-        alert("Change Wallpaper feature - Coming Soon!");
-        break;
-      case "personalize":
-        alert("Personalization feature - Coming Soon!");
-        break;
-      case "display":
-        alert("Display Settings feature - Coming Soon!");
-        break;
       case "settings":
-        alert("System Preferences feature - Coming Soon!");
+        openWindow(
+          "settings",
+          "System Settings",
+          <SettingsApp
+            currentWallpaper={currentWallpaper}
+            onWallpaperChange={setCurrentWallpaper}
+            isDarkMode={isDarkMode}
+            onDarkModeToggle={() => setIsDarkMode(!isDarkMode)}
+            onResetSettings={() => {
+              setCurrentWallpaper(
+                "linear-gradient(135deg, hsl(220 13% 18%), hsl(240 15% 12%), hsl(260 20% 8%))"
+              );
+              setIsDarkMode(true);
+            }}
+          />
+        );
         break;
       case "about":
         openWindow(

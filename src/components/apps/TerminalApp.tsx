@@ -111,7 +111,7 @@ Achievements:
   }, []);
 
   return (
-    <div className="bg-black text-green-400 font-src text-sm h-full flex flex-col">
+    <div className="bg-black rounded-t-xl text-green-400 font-src text-sm h-full flex flex-col">
       <div className="flex-1 p-4 overflow-auto">
         {history.map((entry, index) => (
           <div key={index} className="mb-2">

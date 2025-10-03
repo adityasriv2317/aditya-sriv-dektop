@@ -60,6 +60,29 @@ const WindowManager = ({
     });
   };
 
+  // Handle window resize for maximized windows
+  useEffect(() => {
+    const handleResize = () => {
+      // Update all maximized windows to fit the new screen size
+      windows.forEach((window) => {
+        if (window.isMaximized) {
+          onUpdate(window.id, {
+            position: { x: 0, y: 32 },
+            size: {
+              width: globalThis.window.innerWidth,
+              height: globalThis.window.innerHeight - 32,
+            },
+          });
+        }
+      });
+    };
+
+    window.addEventListener("resize", handleResize);
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, [windows, onUpdate]);
+
   // Use document-level event listeners for smoother dragging
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
@@ -164,7 +187,24 @@ const WindowManager = ({
   };
 
   const minimizeWindow = (windowId: string) => {
-    onUpdate(windowId, { isMinimized: true });
+    // Apply minimize animation class first
+    const window = windows.find((w) => w.id === windowId);
+    if (window) {
+      // First update with animation class
+      onUpdate(windowId, {
+        minimizeAnimation: true,
+      });
+
+      // Then after animation delay, actually minimize
+      setTimeout(() => {
+        onUpdate(windowId, {
+          isMinimized: true,
+          minimizeAnimation: false,
+        });
+      }, 200); // Match the animation duration
+    }
+
+    soundManager.windowMinimize();
   };
 
   const maximizeWindow = (windowId: string) => {
@@ -180,15 +220,15 @@ const WindowManager = ({
       });
       soundManager.click();
     } else {
-      // Maximize to full screen (minus menu bar and some padding)
+      // Maximize to full screen (with just enough space for menu bar)
       onUpdate(windowId, {
         isMaximized: true,
         previousPosition: window.position,
         previousSize: window.size,
-        position: { x: 20, y: 50 },
+        position: { x: 0, y: 32 },
         size: {
-          width: globalThis.window.innerWidth - 40,
-          height: globalThis.window.innerHeight - 150,
+          width: globalThis.window.innerWidth,
+          height: globalThis.window.innerHeight - 32,
         },
       });
       soundManager.click();
@@ -197,63 +237,117 @@ const WindowManager = ({
 
   return (
     <div className="fixed inset-0 pointer-events-none">
+      {/* Minimized window indicators */}
+      <div className="fixed bottom-16 left-4 flex flex-col space-y-2">
+        {windows
+          .filter((window) => window.isMinimized)
+          .map((window, index) => (
+            <div
+              key={window.id}
+              className="w-10 h-10 bg-gray-800/70 rounded-lg shadow-lg 
+                        flex items-center justify-center cursor-pointer transform transition-all 
+                        hover:scale-110 border border-white/20 z-40 pointer-events-auto"
+              onClick={() => onUpdate(window.id, { isMinimized: false })}
+              title={window.title}
+              style={{ left: `${4 + index * 12}px` }}
+            >
+              <div className="text-white font-semibold text-sm">
+                {window.title.charAt(0)}
+              </div>
+            </div>
+          ))}
+      </div>
+
+      {/* Regular windows */}
       {windows
         .filter((window) => !window.isMinimized)
         .sort((a, b) => a.zIndex - b.zIndex)
         .map((window) => (
           <div
             key={window.id}
-            className="absolute custom-scrollbar rounded-xl overflow-auto glass shadow-2xl pointer-events-auto animate-window-appear"
+            className={`absolute custom-scrollbar overflow-hidden glass shadow-2xl pointer-events-auto ${
+              window.minimizeAnimation
+                ? "animate-minimize"
+                : window.isMaximized
+                ? "animate-maximize"
+                : "animate-window-appear"
+            }`}
             style={{
-              left: window.position.x,
-              top: window.position.y,
-              width: window.size.width,
-              height: window.size.height,
+              left: window.isMaximized ? 0 : window.position.x,
+              top: window.isMaximized ? 32 : window.position.y,
+              width: window.isMaximized ? "100vw" : window.size.width,
+              height: window.isMaximized
+                ? "calc(100vh - 32px)"
+                : window.size.height,
               zIndex: window.zIndex,
+              transition: window.isMaximized
+                ? "all 0.3s ease"
+                : dragState.isDragging && dragState.windowId === window.id
+                ? "none"
+                : "box-shadow 0.2s ease",
+              boxShadow: window.isMaximized
+                ? "none"
+                : "0 10px 15px -3px rgba(0, 0, 0, 0.2), 0 4px 6px -2px rgba(0, 0, 0, 0.1)",
+              borderRadius: window.isMaximized ? 0 : "0.75rem",
             }}
             onClick={() => onFocus(window.id)}
           >
             {/* Window title bar */}
             <div
-              className={`flex sticky top-0 backdrop-blur-md z-10 items-center justify-between py-2 px-4  select-none ${
+              className={`flex sticky top-0 backdrop-blur-md z-10 items-center justify-between py-2 px-4 select-none bg-gray-900/80 border-b border-white/10 ${
                 dragState.isDragging && dragState.windowId === window.id
                   ? "cursor-grabbing"
                   : "cursor-grab"
               }`}
               onMouseDown={(e) => handleMouseDown(e, window.id, window)}
+              onDoubleClick={(e) => {
+                e.stopPropagation();
+                maximizeWindow(window.id);
+              }}
             >
               <div className="flex items-center space-x-3">
                 {/* Traffic lights */}
-                <div className="flex space-x-2">
+                <div className="flex space-x-3 group">
                   <button
                     onClick={(e) => {
                       e.stopPropagation();
                       onClose(window.id);
+                      soundManager.windowClose();
                     }}
-                    className="w-3 h-3 bg-red-500 rounded-full hover:bg-red-400 transition-colors"
+                    className="w-4 h-4 bg-red-500 rounded-full hover:bg-red-400 flex items-center justify-center transition-all hover:scale-105"
+                    aria-label="Close window"
                   >
-                    <X className="w-2.5 h-2.5 font-semibold mx-auto text-black" />
+                    <X className="w-2 h-2 opacity-0 group-hover:opacity-100 text-white" />
                   </button>
                   <button
                     onClick={(e) => {
                       e.stopPropagation();
                       minimizeWindow(window.id);
+                      soundManager.windowMinimize();
                     }}
-                    className="w-3 h-3 bg-yellow-500 rounded-full hover:bg-yellow-400 transition-colors"
+                    className="w-4 h-4 bg-yellow-500 rounded-full hover:bg-yellow-400 flex items-center justify-center transition-all hover:scale-105"
+                    aria-label="Minimize window"
                   >
-                    <Minus className="w-2.5 h-2.5 font-semibold mx-auto text-black" />
+                    <Minus className="w-2 h-2 opacity-0 group-hover:opacity-100 text-white" />
                   </button>
                   <button
                     onClick={(e) => {
                       e.stopPropagation();
                       maximizeWindow(window.id);
                     }}
-                    className="w-3 h-3 bg-green-500 rounded-full hover:bg-green-400 transition-colors flex items-center justify-center"
+                    className={`w-4 h-4 ${
+                      window.isMaximized
+                        ? "bg-blue-500 hover:bg-blue-400"
+                        : "bg-green-500 hover:bg-green-400"
+                    } rounded-full flex items-center justify-center transition-all hover:scale-105`}
+                    aria-label={
+                      window.isMaximized ? "Restore window" : "Maximize window"
+                    }
                   >
                     {window.isMaximized ? (
-                      <Minimize2 className="w-1.5 h-1.5 text-green-900" />
+                      <Minimize2 className="w-2 h-2 text-white" />
                     ) : (
-                      <Maximize2 className="w-1.5 h-1.5 text-green-900" />
+                      <Maximize2 className="w-2 h-2 opacity-0 group-hover:opacity-100 text-white" />
                     )}
                   </button>
                 </div>

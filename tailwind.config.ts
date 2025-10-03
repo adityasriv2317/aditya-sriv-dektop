@@ -149,6 +149,8 @@ export default {
           "menubar-slide-down 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
         "icon-appear": "icon-appear 0.4s cubic-bezier(0.4, 0, 0.2, 1)",
         "fade-in": "fade-in 0.3s ease-out",
+        "maximize": "maximize 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
+        "minimize": "minimize 0.2s cubic-bezier(0.4, 0, 0.2, 1)",
         blink: "blink 1s step-end infinite",
       },
       fontFamily: {

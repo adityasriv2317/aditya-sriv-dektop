@@ -26,15 +26,11 @@ export interface BrowserAppRef {
   addTab: (url: string, title: string) => void;
 }
 
-// --- MAIN COMPONENT ---
-
 const BrowserApp = forwardRef<BrowserAppRef, StandaloneBrowserAppProps>(
   (
     { initialUrl, initialTitle = "Browser", onClose, isResizable = true },
     ref
   ) => {
-    // === WINDOW STATE & LOGIC (from WindowManager) ===
-
     const [position, setPosition] = useState({ x: 150, y: 80 });
     const [size, setSize] = useState({ width: 900, height: 700 });
     const [isMinimized, setIsMinimized] = useState(false);
@@ -89,11 +85,20 @@ const BrowserApp = forwardRef<BrowserAppRef, StandaloneBrowserAppProps>(
 
     const minimizeWindow = () => {
       setIsMinimized(true);
+      // When minimizing, dispatch a custom event that can be listened to by parent components
+      const minimizeEvent = new CustomEvent("browser-minimized", {
+        detail: { id: ref },
+      });
+      window.dispatchEvent(minimizeEvent);
+    };
+
+    // Function to restore the window from minimized state
+    const restoreFromMinimized = () => {
+      setIsMinimized(false);
     };
 
     const maximizeWindow = () => {
       if (isMaximized) {
-        // Restore
         if (previousState) {
           setPosition(previousState.pos);
           setSize(previousState.size);
@@ -101,12 +106,11 @@ const BrowserApp = forwardRef<BrowserAppRef, StandaloneBrowserAppProps>(
         setIsMaximized(false);
         setPreviousState(null);
       } else {
-        // Maximize
         setPreviousState({ pos: position, size: size });
-        setPosition({ x: 20, y: 50 });
+        setPosition({ x: 0, y: 32 });
         setSize({
-          width: window.innerWidth - 40,
-          height: window.innerHeight - 150,
+          width: window.innerWidth,
+          height: window.innerHeight - 32,
         });
         setIsMaximized(true);
       }
@@ -248,7 +252,6 @@ const BrowserApp = forwardRef<BrowserAppRef, StandaloneBrowserAppProps>(
     const closeTab = (tabId: string, e: React.MouseEvent) => {
       e.stopPropagation();
 
-      // If it's the last tab, close the entire window.
       if (tabs.length === 1) {
         onClose();
         return;
@@ -278,27 +281,61 @@ const BrowserApp = forwardRef<BrowserAppRef, StandaloneBrowserAppProps>(
       }
     };
 
+    // Add an effect to handle window resize events for maximized windows
+    useEffect(() => {
+      const handleResize = () => {
+        if (isMaximized) {
+          // Update the maximized window size when the browser window resizes
+          setSize({
+            width: window.innerWidth,
+            height: window.innerHeight - 32,
+          });
+        }
+      };
+
+      window.addEventListener("resize", handleResize);
+      return () => {
+        window.removeEventListener("resize", handleResize);
+      };
+    }, [isMaximized]);
+
     if (isMinimized) {
-      return null; // Or a placeholder in a dock
+      // When minimized, render a small indicator that can be clicked to restore
+      return (
+        <div
+          className="fixed bottom-4 left-4 w-10 h-10 bg-gray-800/70 rounded-lg shadow-lg 
+                    flex items-center justify-center cursor-pointer transform transition-all 
+                    hover:scale-110 border border-white/20 z-40"
+          onClick={() => setIsMinimized(false)}
+          title={activeTab?.title || "Browser"}
+        >
+          <img src="/icons/ionpc.png" className="w-6 h-6" alt="Browser" />
+        </div>
+      );
     }
 
     return (
       <div
-        className="absolute custom-scrollbar rounded-xl overflow-hidden glass shadow-2xl pointer-events-auto animate-window-appear flex flex-col"
+        className={`absolute custom-scrollbar overflow-hidden glass shadow-2xl pointer-events-auto flex flex-col ${
+          isMaximized ? "animate-maximize" : "animate-window-appear"
+        }`}
         style={{
-          left: position.x,
-          top: position.y,
-          width: size.width,
-          height: size.height,
+          left: isMaximized ? 0 : position.x,
+          top: isMaximized ? 32 : position.y,
+          width: isMaximized ? "100vw" : size.width,
+          height: isMaximized ? "calc(100vh - 32px)" : size.height,
           zIndex: 50,
           transition: isMaximized
             ? "all 0.3s ease"
             : dragState.isDragging
             ? "none"
             : "box-shadow 0.2s ease",
-          boxShadow: dragState.isDragging
+          boxShadow: isMaximized
+            ? "none"
+            : dragState.isDragging
             ? "0 20px 25px -5px rgba(0, 0, 0, 0.5), 0 10px 10px -5px rgba(0, 0, 0, 0.2)"
-            : "",
+            : "0 10px 15px -3px rgba(0, 0, 0, 0.2), 0 4px 6px -2px rgba(0, 0, 0, 0.1)",
+          borderRadius: isMaximized ? 0 : "0.75rem",
           opacity: isMinimized ? 0 : 1,
         }}
       >
@@ -313,34 +350,38 @@ const BrowserApp = forwardRef<BrowserAppRef, StandaloneBrowserAppProps>(
           <div className="flex items-center justify-between w-full">
             <div className="flex items-center space-x-3">
               <div
-                className="flex space-x-2"
+                className="flex space-x-3 group"
                 onClick={(e) => e.stopPropagation()}
               >
                 <button
                   onClick={onClose}
-                  className="w-3 h-3 bg-red-500 rounded-full hover:bg-red-400 flex items-center justify-center"
+                  className="w-4 h-4 bg-red-500 rounded-full hover:bg-red-400 flex items-center justify-center transition-all hover:scale-105"
                   aria-label="Close window"
                 >
-                  <X className="w-1.5 h-1.5 opacity-0 group-hover:opacity-100" />
+                  <X className="w-2 h-2 opacity-0 group-hover:opacity-100 text-white" />
                 </button>
                 <button
                   onClick={minimizeWindow}
-                  className="w-3 h-3 bg-yellow-500 rounded-full hover:bg-yellow-400 flex items-center justify-center"
+                  className="w-4 h-4 bg-yellow-500 rounded-full hover:bg-yellow-400 flex items-center justify-center transition-all hover:scale-105"
                   aria-label="Minimize window"
                 >
-                  <Minus className="w-1.5 h-1.5 opacity-0 group-hover:opacity-100" />
+                  <Minus className="w-2 h-2 opacity-0 group-hover:opacity-100 text-white" />
                 </button>
                 <button
                   onClick={maximizeWindow}
-                  className="w-3 h-3 bg-green-500 rounded-full hover:bg-green-400 flex items-center justify-center"
+                  className={`w-4 h-4 ${
+                    isMaximized
+                      ? "bg-blue-500 hover:bg-blue-400"
+                      : "bg-green-500 hover:bg-green-400"
+                  } rounded-full flex items-center justify-center transition-all hover:scale-105`}
                   aria-label={
                     isMaximized ? "Restore window" : "Maximize window"
                   }
                 >
                   {isMaximized ? (
-                    <Minimize2 className="w-1.5 h-1.5" />
+                    <Minimize2 className="w-2 h-2 text-white" />
                   ) : (
-                    <Maximize2 className="w-1.5 h-1.5" />
+                    <Maximize2 className="w-2 h-2 opacity-0 group-hover:opacity-100 text-white" />
                   )}
                 </button>
               </div>
@@ -360,7 +401,10 @@ const BrowserApp = forwardRef<BrowserAppRef, StandaloneBrowserAppProps>(
         {/* Browser Content Area */}
         <div className="flex flex-col flex-1 h-full min-h-0">
           {/* Tab Bar */}
-          <div className="bg-gray-900/90 border-b border-white/10 flex items-center">
+          <div
+            className="bg-gray-900/90 border-b border-white/10 flex items-center"
+            onDoubleClick={maximizeWindow}
+          >
             <div className="flex-1 flex items-center overflow-x-auto hide-scrollbar">
               {tabs.map((tab) => (
                 <div

@@ -21,6 +21,7 @@ import QuizakiApp from "../apps/projects/QuizakiApp";
 import WeatherApp from "../apps/projects/WeatherApp";
 import SonicBoomApp from "../apps/projects/SonicBoomApp";
 import BrowserApp from "../apps/BrowserApp";
+import type { BrowserAppRef } from "../apps/BrowserApp";
 
 const Desktop = () => {
   const [windows, setWindows] = useState<WindowData[]>([]);
@@ -159,43 +160,63 @@ const Desktop = () => {
     soundManager.windowOpen();
   };
 
+  // Define the browser window interface
+  interface BrowserWindowData {
+    id: string;
+    url: string;
+    title: string;
+    isVisible: boolean;
+    component: React.ReactNode;
+    ref: React.RefObject<BrowserAppRef | null>;
+  }
+  
   // Manage standalone browser windows separately from regular windows
-  const [browserWindows, setBrowserWindows] = useState<
-    {
-      id: string;
-      url: string;
-      title: string;
-      isVisible: boolean;
-      component: React.ReactNode;
-    }[]
-  >([]);
+  const [browserWindows, setBrowserWindows] = useState<BrowserWindowData[]>([]);
 
   const openBrowser = (url: string, title: string) => {
-    // Check if a browser window with this URL already exists
-    const existingBrowser = browserWindows.find((bw) => bw.url === url);
+    // If any browser window is already visible, use it to open a new tab
+    const anyVisibleBrowser = browserWindows.find(bw => bw.isVisible);
+    
+    if (anyVisibleBrowser && anyVisibleBrowser.ref.current) {
+      // Add a new tab to the existing browser window
+      anyVisibleBrowser.ref.current.addTab(url, title);
+      return;
+    }
 
-    if (existingBrowser) {
-      // If it exists but is hidden, make it visible
-      if (!existingBrowser.isVisible) {
-        setBrowserWindows((prev) =>
-          prev.map((bw) =>
-            bw.id === existingBrowser.id ? { ...bw, isVisible: true } : bw
-          )
-        );
-        soundManager.windowOpen();
+    // Check if we have a hidden browser we can reuse
+    const anyHiddenBrowser = browserWindows.find(bw => !bw.isVisible);
+    
+    if (anyHiddenBrowser) {
+      // Make it visible and open the URL in a new tab
+      setBrowserWindows(prev =>
+        prev.map(bw =>
+          bw.id === anyHiddenBrowser.id ? { ...bw, isVisible: true } : bw
+        )
+      );
+      
+      // If the browser has a ref with the addTab method, use it
+      if (anyHiddenBrowser.ref.current) {
+        setTimeout(() => {
+          anyHiddenBrowser.ref.current?.addTab(url, title);
+        }, 100); // Small delay to ensure the browser is visible first
       }
+      
+      soundManager.windowOpen();
       return;
     }
 
     // Otherwise create a new browser window
     const newBrowserId = `browser-${Date.now()}`;
+    const browserRef = React.createRef<BrowserAppRef>();
+    
     const browserComponent = (
       <BrowserApp
         initialUrl={url}
         initialTitle={title}
+        ref={browserRef}
         onClose={() => {
-          setBrowserWindows((prev) =>
-            prev.map((bw) =>
+          setBrowserWindows(prev =>
+            prev.map(bw =>
               bw.id === newBrowserId ? { ...bw, isVisible: false } : bw
             )
           );
@@ -204,7 +225,7 @@ const Desktop = () => {
       />
     );
 
-    setBrowserWindows((prev) => [
+    setBrowserWindows(prev => [
       ...prev,
       {
         id: newBrowserId,
@@ -212,6 +233,7 @@ const Desktop = () => {
         title,
         isVisible: true,
         component: browserComponent,
+        ref: browserRef
       },
     ]);
     soundManager.windowOpen();

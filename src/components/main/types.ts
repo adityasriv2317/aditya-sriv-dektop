@@ -11,6 +11,7 @@ export interface WindowData {
   isMaximized?: boolean;
   previousPosition?: { x: number; y: number };
   previousSize?: { width: number; height: number };
+  minimizeAnimation?: boolean; // Animation state for minimize effect
 }
 
 export interface AppData {

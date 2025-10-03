@@ -5,7 +5,7 @@ import React, {
   useImperativeHandle,
 } from "react";
 import {
-  RefreshCw,
+  //   RefreshCw,
   Plus,
   X,
   Minus,
@@ -13,8 +13,6 @@ import {
   Minimize2,
   Globe,
 } from "lucide-react";
-
-// --- TYPE DEFINITIONS ---
 
 interface Tab {
   id: string;
@@ -100,10 +98,9 @@ const BrowserApp = forwardRef<BrowserAppRef, BrowserAppProps>(
       window.dispatchEvent(minimizeEvent);
     };
 
-    // Function to restore the window from minimized state
-    const restoreFromMinimized = () => {
-      setIsMinimized(false);
-    };
+    // const restoreFromMinimized = () => {
+    //   setIsMinimized(false);
+    // };
 
     const maximizeWindow = () => {
       if (isMaximized) {

@@ -9,8 +9,8 @@ const ContactApp = () => {
   const contactMethods = [
     {
       icon: (
-        <div className="bg-red-600 w-8 h-8 p-1 rounded-full">
-          <Mail className="w-6 h-6 rounded-full" />
+        <div className="bg-red-600 w-8 h-8 p-1 rounded-full flex items-center justify-center">
+          <Mail className="w-6 h-6 text-white" />
         </div>
       ),
       label: "Email",
@@ -20,8 +20,8 @@ const ContactApp = () => {
     },
     {
       icon: (
-        <div className="bg-blue-600 w-8 h-8 p-1 rounded-full">
-          <Linkedin className="w-6 h-6 rounded-full" />
+        <div className="bg-blue-600 w-8 h-8 p-1 rounded-full flex items-center justify-center">
+          <Linkedin className="w-6 h-6 text-white" />
         </div>
       ),
       label: "LinkedIn",
@@ -31,8 +31,8 @@ const ContactApp = () => {
     },
     {
       icon: (
-        <div className="bg-purple-600 w-8 h-8 p-1 rounded-full">
-          <Github className="w-6 h-6 rounded-full" />
+        <div className="bg-purple-600 w-8 h-8 p-1 rounded-full flex items-center justify-center">
+          <Github className="w-6 h-6 text-white" />
         </div>
       ),
       label: "GitHub",
@@ -42,8 +42,8 @@ const ContactApp = () => {
     },
     {
       icon: (
-        <div className="bg-orange-400 w-8 h-8 p-1 rounded-full">
-          <Code className="w-6 h-6 rounded-full" />
+        <div className="bg-orange-400 w-8 h-8 p-1 rounded-full flex items-center justify-center">
+          <Code className="w-6 h-6 text-white" />
         </div>
       ),
       label: "LeetCode",

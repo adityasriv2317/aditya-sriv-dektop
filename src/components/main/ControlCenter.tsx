@@ -1,23 +1,21 @@
-import { useState } from 'react';
-import { X, Sun, Moon, Minus, Plus, Download } from 'lucide-react';
+import { X, Sun, Moon, Minus, Plus } from "lucide-react";
+import { useAppSettings } from "@/contexts/AppSettingsContext";
 
 interface ControlCenterProps {
   onClose: () => void;
 }
 
 const ControlCenter = ({ onClose }: ControlCenterProps) => {
-  const [isDarkMode, setIsDarkMode] = useState(true);
-  const [fontSize, setFontSize] = useState(16);
+  const { isDarkMode, setIsDarkMode, fontSize, setFontSize } = useAppSettings();
 
   const resumeVersions = [
-    { name: 'Latest Resume', date: 'November 2024', url: '#' },
-    { name: 'Previous Version', date: 'October 2024', url: '#' },
-    { name: 'Internship Resume', date: 'September 2024', url: '#' },
+    { name: "V2", url: "https://aditya2317.vercel.app/" },
+    { name: "V1", url: "https://adityasrivastava1.vercel.app/" },
   ];
 
   return (
     <div className="fixed inset-0 z-50" onClick={onClose}>
-      <div 
+      <div
         className="absolute top-8 right-4 w-80 glass rounded-2xl p-6 shadow-2xl"
         onClick={(e) => e.stopPropagation()}
       >
@@ -39,12 +37,14 @@ const ControlCenter = ({ onClose }: ControlCenterProps) => {
             <button
               onClick={() => setIsDarkMode(!isDarkMode)}
               className={`w-12 h-6 rounded-full flex items-center transition-colors ${
-                isDarkMode ? 'bg-blue-500' : 'bg-gray-400'
+                isDarkMode ? "bg-blue-500" : "bg-gray-400"
               }`}
+              aria-pressed={isDarkMode}
+              role="switch"
             >
               <div
                 className={`w-5 h-5 rounded-full bg-white transition-transform flex items-center justify-center ${
-                  isDarkMode ? 'translate-x-6' : 'translate-x-1'
+                  isDarkMode ? "translate-x-6" : "translate-x-1"
                 }`}
               >
                 {isDarkMode ? (
@@ -65,20 +65,22 @@ const ControlCenter = ({ onClose }: ControlCenterProps) => {
           </div>
           <div className="flex items-center space-x-3">
             <button
-              onClick={() => setFontSize(Math.max(12, fontSize - 2))}
+              onClick={() => setFontSize(Math.max(12, fontSize - 1))}
               className="p-2 rounded-lg glass-hover transition-colors"
+              aria-label="Decrease font size"
             >
               <Minus className="w-4 h-4 text-white/70" />
             </button>
             <div className="flex-1 h-2 bg-gray-600 rounded-full">
               <div
-                className="h-full bg-gradient-to-r from-blue-400 to-purple-500 rounded-full"
+                className="h-full bg-gradient-to-r from-blue-400 to-purple-500 rounded-full transition-all duration-300"
                 style={{ width: `${((fontSize - 12) / 8) * 100}%` }}
               />
             </div>
             <button
-              onClick={() => setFontSize(Math.min(20, fontSize + 2))}
+              onClick={() => setFontSize(Math.min(20, fontSize + 1))}
               className="p-2 rounded-lg glass-hover transition-colors"
+              aria-label="Increase font size"
             >
               <Plus className="w-4 h-4 text-white/70" />
             </button>
@@ -87,18 +89,14 @@ const ControlCenter = ({ onClose }: ControlCenterProps) => {
 
         {/* Resume Versions */}
         <div>
-          <h4 className="text-white/90 mb-3">Resume Versions</h4>
+          <h4 className="text-white/90 mb-3">Previous Portfolio</h4>
           <div className="space-y-2">
             {resumeVersions.map((resume, index) => (
               <div
                 key={index}
                 className="flex items-center justify-between p-3 rounded-lg glass-hover transition-colors cursor-pointer"
               >
-                <div>
-                  <div className="text-white/90 text-sm">{resume.name}</div>
-                  <div className="text-white/60 text-xs">{resume.date}</div>
-                </div>
-                <Download className="w-4 h-4 text-white/70" />
+                <div className="text-white/90 text-sm">{resume.name}</div>
               </div>
             ))}
           </div>

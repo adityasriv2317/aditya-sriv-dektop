@@ -54,7 +54,7 @@ const ContactApp = () => {
   ];
 
   return (
-    <div className="h-full rounded-xl overflow-auto glass text-white">
+    <div className="overflow-auto backdrop-blur-2xl text-white">
       <div className="p-8">
         {/* Header */}
         <div className="flex items-center justify-center gap-8 mb-4.5">
@@ -168,7 +168,7 @@ const ContactApp = () => {
             >
               <div className="flex font-src items-center mb-2">
                 <Mail className="w-5 h-5" />
-                <h3 className="ml-3 font-semibold">Send Message</h3>
+                <h3 className="ml-3 font-semibold">Send Email</h3>
               </div>
               <p className="text-sm opacity-80 font-mono">
                 Quick email template

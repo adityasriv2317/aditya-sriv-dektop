@@ -12,17 +12,21 @@ interface ControlCenterProps {
   onOpenBrowser?: (url: string, title: string) => void;
 }
 
-const ControlCenter = ({ onClose, onOpenWindow, onOpenBrowser }: ControlCenterProps) => {
+const ControlCenter = ({
+  onClose,
+  onOpenWindow,
+  onOpenBrowser,
+}: ControlCenterProps) => {
   const { isDarkMode, setIsDarkMode, fontSize, setFontSize } = useAppSettings();
 
   const portfolioVersions = [
     {
-      name: "V2",
+      name: "March 2025 (V2)",
       url: "https://aditya2317.vercel.app/",
       title: "Portfolio V2",
     },
     {
-      name: "V1",
+      name: "October 2024 (V1)",
       url: "https://adityasrivastava1.vercel.app/",
       title: "Portfolio V1",
     },
@@ -35,10 +39,12 @@ const ControlCenter = ({ onClose, onOpenWindow, onOpenBrowser }: ControlCenterPr
     } else {
       // Fallback to opening in a new window if onOpenBrowser is not available
       const windowId = `browser-${Date.now()}`;
-      onOpenWindow(windowId, title, 
-        <BrowserApp 
-          initialUrl={url} 
-          initialTitle={title} 
+      onOpenWindow(
+        windowId,
+        title,
+        <BrowserApp
+          initialUrl={url}
+          initialTitle={title}
           onClose={() => {}} // This will be overridden by WindowManager
         />
       );
@@ -79,7 +85,7 @@ const ControlCenter = ({ onClose, onOpenWindow, onOpenBrowser }: ControlCenterPr
           </label>
         </div>
 
-        {/* Font Size */}
+        {/* Scale Size */}
         <div className="mb-6">
           <div className="flex items-center justify-between mb-2">
             <span className="text-white/90">Display Scale:</span>
@@ -93,9 +99,9 @@ const ControlCenter = ({ onClose, onOpenWindow, onOpenBrowser }: ControlCenterPr
             >
               <Minus className="w-4 h-4 text-white/70" />
             </button>
-            <div className="flex-1 h-2 bg-gray-600 rounded-full">
+            <div className="flex-1 h-2 bg-gray-600/10 rounded-full">
               <div
-                className="h-full bg-gradient-to-r from-blue-400 to-purple-500 rounded-full transition-all duration-300"
+                className="h-full glass rounded-full transition-all duration-300"
                 style={{ width: `${((fontSize - 12) / 8) * 100}%` }}
               />
             </div>
@@ -122,7 +128,9 @@ const ControlCenter = ({ onClose, onOpenWindow, onOpenBrowser }: ControlCenterPr
                 className="flex items-center justify-between p-3 rounded-lg glass-hover transition-colors cursor-pointer"
               >
                 <div className="text-white/90 text-sm">{portfolio.name}</div>
-                <div className="text-blue-400 text-xs">View</div>
+                <div className="text-blue-400 bg-white/10 rounded-md p-1 cursor-pointer text-xs">
+                  View
+                </div>
               </div>
             ))}
           </div>

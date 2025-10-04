@@ -1,9 +1,14 @@
 import { useState } from "react";
-import { Settings, Wifi, Battery, Volume2 } from "lucide-react";
+import { Wifi, Battery, Volume2, CircleEllipsis } from "lucide-react";
 import ControlCenter from "./ControlCenter";
+import Logo from "../ui/logo";
 
 interface MenuBarProps {
-  onOpenWindow: (appId: string, title: string, component?: React.ReactNode) => void;
+  onOpenWindow: (
+    appId: string,
+    title: string,
+    component?: React.ReactNode
+  ) => void;
   onOpenBrowser?: (url: string, title: string) => void;
 }
 
@@ -39,10 +44,8 @@ const MenuBar: React.FC<MenuBarProps> = ({ onOpenWindow, onOpenBrowser }) => {
     <>
       <div className="fixed top-0 left-0 right-0 h-8 glass menubar z-50 flex items-center justify-between px-4">
         {/* Left side - AS logo */}
-        <div className="flex cursor-pointer items-center bg-white rounded-full px-1 py-0.5">
-          <div className="text-sm font-semibold bg-black bg-clip-text text-transparent">
-            AS
-          </div>
+        <div className="flex cursor-pointer items-center bg-white not-hover:rounded-full hover:rounded-l-xl hover:rounded-r-xl transition-all ease-in-out px-1.5 py-0.5">
+          <Logo />
         </div>
 
         {/* Right side - System indicators */}
@@ -62,16 +65,16 @@ const MenuBar: React.FC<MenuBarProps> = ({ onOpenWindow, onOpenBrowser }) => {
             onClick={() => setShowControlCenter(!showControlCenter)}
             className="p-1 rounded glass-hover transition-colors cursor-pointer"
           >
-            <Settings className="w-4 h-4 text-white/70" />
+            <CircleEllipsis className="w-5 h-5 text-white/70" />
           </button>
         </div>
       </div>
 
       {showControlCenter && (
-        <ControlCenter 
+        <ControlCenter
           onClose={() => setShowControlCenter(false)}
           onOpenWindow={onOpenWindow}
-          onOpenBrowser={onOpenBrowser} 
+          onOpenBrowser={onOpenBrowser}
         />
       )}
     </>

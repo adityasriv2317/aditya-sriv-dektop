@@ -299,7 +299,7 @@ const WindowManager = ({
         .map((window) => (
           <div
             key={window.id}
-            className={`absolute custom-scrollbar overflow-auto glass shadow-2xl pointer-events-auto ${
+            className={`absolute custom-scrollbar h-fit overflow-auto glass shadow-2xl pointer-events-auto ${
               window.minimizeAnimation
                 ? "animate-minimize"
                 : window.isMaximized

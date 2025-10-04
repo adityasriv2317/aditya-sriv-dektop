@@ -342,7 +342,7 @@ const Desktop = () => {
       onClick={closeContextMenu}
     >
       {/* Desktop wallpaper overlay */}
-      <div className="absolute inset-0 bg-black/20" />
+      <div className="absolute inset-0 bg-indigo-800/20" />
 
       {/* Desktop Icons */}
       {desktopIcons.map((icon) => (

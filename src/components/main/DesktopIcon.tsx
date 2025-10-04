@@ -28,7 +28,6 @@ const DesktopIcon = ({
     }
   };
 
-  // Use document-level event listeners for smooth dragging
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
       if (isDragging) {

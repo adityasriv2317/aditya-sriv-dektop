@@ -11,7 +11,6 @@ import {
   Minus,
   Maximize2,
   Minimize2,
-  Globe,
 } from "lucide-react";
 
 interface Tab {
@@ -29,7 +28,7 @@ interface BrowserAppProps {
 }
 
 export interface BrowserAppRef {
-  addTab: (url: string, title: string) => void;
+  addTab: (url: string, title: string) => string;
 }
 
 const BrowserApp = forwardRef<BrowserAppRef, BrowserAppProps>(
@@ -218,8 +217,6 @@ const BrowserApp = forwardRef<BrowserAppRef, BrowserAppProps>(
       };
     }, [dragState, resizeState, position, size]);
 
-    // === BROWSER STATE & LOGIC (from BrowserApp) ===
-
     const [tabs, setTabs] = useState<Tab[]>([]);
     const [activeTabId, setActiveTabId] = useState<string>("");
     const [isLoading, setIsLoading] = useState(true);
@@ -245,36 +242,75 @@ const BrowserApp = forwardRef<BrowserAppRef, BrowserAppProps>(
         title: newTitle,
         isLoading: true,
       };
-      setTabs([...tabs, newTab]);
+      setTabs((prev) => [...prev, newTab]);
       setActiveTabId(newTab.id);
       setCurrentUrl(newUrl);
+      return newTab.id;
+    };
+
+    // Remove a tab by id (functional update to avoid races)
+    const removeTabById = (tabId: string) => {
+      setTabs((prev) => {
+        const idx = prev.findIndex((t) => t.id === tabId);
+        if (idx === -1) return prev;
+        const newTabs = prev.filter((t) => t.id !== tabId);
+
+        // If the removed tab was active, pick adjacent
+        if (activeTabId === tabId) {
+          const newActiveIndex = Math.max(0, idx - 1);
+          if (newTabs[newActiveIndex]) {
+            setActiveTabId(newTabs[newActiveIndex].id);
+            setCurrentUrl(newTabs[newActiveIndex].url);
+            setIsLoading(newTabs[newActiveIndex].isLoading);
+          } else {
+            onClose();
+          }
+        }
+
+        return newTabs;
+      });
     };
 
     useImperativeHandle(ref, () => ({
       addTab: (tabUrl: string, tabTitle: string) => addNewTab(tabUrl, tabTitle),
     }));
 
-    const closeTab = (tabId: string, e: React.MouseEvent) => {
-      e.stopPropagation();
+    const projectShortcuts: {
+      name: string;
+      url: string;
+      icon?: React.ReactNode;
+    }[] = [
+      { name: "Cable", url: "https://cable-web-page.vercel.app/" },
+      { name: "weCaptcha", url: "https://wecaptcha.vercel.app/" },
+      { name: "Sonic Boom", url: "https://sonic-boomgame.vercel.app/" },
+      { name: "Quizaki", url: "https://quizaki.vercel.app/" },
+      { name: "Pratham", url: "https://pratham.adityasrivastava.me/" },
+    ];
 
-      if (tabs.length === 1) {
-        onClose();
-        return;
-      }
+    const closeTab = (tabId: string, e?: React.MouseEvent) => {
+      if (e) e.stopPropagation();
 
-      const tabIndex = tabs.findIndex((tab) => tab.id === tabId);
-      const newTabs = tabs.filter((tab) => tab.id !== tabId);
-      setTabs(newTabs);
-
-      // If the closed tab was active, switch to an adjacent tab
-      if (activeTabId === tabId) {
-        const newActiveIndex = Math.max(0, tabIndex - 1);
-        if (newTabs[newActiveIndex]) {
-          setActiveTabId(newTabs[newActiveIndex].id);
-          setCurrentUrl(newTabs[newActiveIndex].url);
-          setIsLoading(newTabs[newActiveIndex].isLoading);
+      setTabs((prev) => {
+        if (prev.length === 1) {
+          // closing last tab -> close window
+          onClose();
+          return prev;
         }
-      }
+
+        const idx = prev.findIndex((t) => t.id === tabId);
+        const newTabs = prev.filter((t) => t.id !== tabId);
+
+        if (activeTabId === tabId) {
+          const newActiveIndex = Math.max(0, idx - 1);
+          if (newTabs[newActiveIndex]) {
+            setActiveTabId(newTabs[newActiveIndex].id);
+            setCurrentUrl(newTabs[newActiveIndex].url);
+            setIsLoading(newTabs[newActiveIndex].isLoading);
+          }
+        }
+
+        return newTabs;
+      });
     };
 
     const switchTab = (tabId: string) => {
@@ -314,7 +350,7 @@ const BrowserApp = forwardRef<BrowserAppRef, BrowserAppProps>(
           onClick={() => setIsMinimized(false)}
           title={activeTab?.title || "Browser"}
         >
-          <Globe className="w-5 h-5 text-white/90" />
+          <img src="/icons/ionpc.png" className="w-6 h-6" alt="Browser" />
         </div>
       );
     }
@@ -400,7 +436,7 @@ const BrowserApp = forwardRef<BrowserAppRef, BrowserAppProps>(
                       className={`flex items-center px-3 py-2 min-w-[120px] max-w-[200px] border-r border-white/10 cursor-pointer ${
                         tab.id === activeTabId
                           ? "bg-black/25"
-                          : "bg-gray-900/10 hover:bg-gray-800/50"
+                          : "bg-gray-900/15 hover:bg-black/15"
                       }`}
                     >
                       <div className="flex-1 text-xs text-white/90 truncate">
@@ -439,24 +475,56 @@ const BrowserApp = forwardRef<BrowserAppRef, BrowserAppProps>(
                 <div className="animate-spin w-8 h-8 border-2 border-white/10 border-t-white/90 rounded-full"></div>
               </div>
             )}
-            <iframe
-              src={currentUrl}
-              className="w-full h-full border-0"
-              title={activeTab?.title || "Browser Tab"}
-              onLoad={() => {
-                setIsLoading(false);
-                if (activeTabId) {
-                  setTabs(
-                    tabs.map((tab) =>
-                      tab.id === activeTabId
-                        ? { ...tab, isLoading: false }
-                        : tab
-                    )
-                  );
-                }
-              }}
-              sandbox="allow-scripts allow-same-origin allow-forms"
-            />
+
+            {/* If this tab is a fresh new tab (about:blank), show shortcuts grid */}
+            {currentUrl === "about:blank" ? (
+              <div className="p-6 grid grid-cols-2 sm:grid-cols-3 gap-4">
+                {projectShortcuts.map((s) => (
+                  <button
+                    key={s.url}
+                    onClick={() => {
+                      const blankTab = activeTab;
+                      const newTabId = addNewTab(s.url, s.name);
+                      if (blankTab && blankTab.url === "about:blank") {
+                        // remove the blank tab and activate the new one
+                        removeTabById(blankTab.id);
+                        setActiveTabId(newTabId);
+                        const target = projectShortcuts.find(
+                          (p) => p.url === s.url
+                        );
+                        setCurrentUrl(target ? target.url : s.url);
+                      }
+                    }}
+                    className="flex flex-col items-center justify-center p-4 bg-white/5 hover:bg-white/10 rounded-lg border border-white/5"
+                    title={s.name}
+                  >
+                    <div className="w-10 h-10 rounded-md bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-white font-semibold">
+                      {s.name.charAt(0)}
+                    </div>
+                    <div className="mt-2 text-xs text-white/90">{s.name}</div>
+                  </button>
+                ))}
+              </div>
+            ) : (
+              <iframe
+                src={currentUrl}
+                className="w-full h-full border-0"
+                title={activeTab?.title || "Browser Tab"}
+                onLoad={() => {
+                  setIsLoading(false);
+                  if (activeTabId) {
+                    setTabs((prev) =>
+                      prev.map((tab) =>
+                        tab.id === activeTabId
+                          ? { ...tab, isLoading: false }
+                          : tab
+                      )
+                    );
+                  }
+                }}
+                sandbox="allow-scripts allow-same-origin allow-forms"
+              />
+            )}
           </div>
         </div>
 

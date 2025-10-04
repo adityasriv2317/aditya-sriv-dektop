@@ -31,13 +31,13 @@ const SettingsApp = ({
   const wallpapers: WallpaperData[] = [
     {
       id: "default",
-      name: "Default Dark",
+      name: "Mist",
       gradient:
-        "linear-gradient(135deg, hsl(220 13% 18%), hsl(240 15% 12%), hsl(260 20% 8%))",
+        "linear-gradient(135deg, hsl(240, 28%, 23%), hsl(244, 33%, 19%), hsl(249, 42%, 15%))",
     },
     {
       id: "ocean",
-      name: "Ocean Blue",
+      name: "Ocean",
       gradient: "linear-gradient(135deg, #0c4a6e, #164e63, #0891b2)",
     },
     {
@@ -52,12 +52,12 @@ const SettingsApp = ({
     },
     {
       id: "purple",
-      name: "Purple Haze",
+      name: "Haze",
       gradient: "linear-gradient(135deg, #581c87, #7c3aed, #8b5cf6)",
     },
     {
       id: "minimal",
-      name: "Minimal Gray",
+      name: "Minimal",
       gradient: "linear-gradient(135deg, #374151, #4b5563, #6b7280)",
     },
   ];

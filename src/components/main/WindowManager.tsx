@@ -328,7 +328,7 @@ const WindowManager = ({
           >
             {/* Window title bar */}
             <div
-              className={`flex sticky top-0 backdrop-blur-md z-10 items-center justify-between py-2 px-4 select-none border-b border-white/10 ${
+              className={`flex sticky top-0 backdrop-blur-md z-10 items-center justify-between py-2 px-4 select-none ${
                 dragState.isDragging && dragState.windowId === window.id
                   ? "cursor-grabbing"
                   : "cursor-grab"
@@ -351,7 +351,7 @@ const WindowManager = ({
                     className="w-4 h-4 bg-red-500 rounded-full hover:bg-red-400 flex items-center justify-center transition-all hover:scale-105"
                     aria-label="Close window"
                   >
-                    <X className="w-3 h-3 opacity-0 group-hover:opacity-100 text-white" />
+                    <X className="w-3 h-3 opacity-0 group-hover:opacity-100 text-black" />
                   </button>
                   <button
                     onClick={(e) => {
@@ -362,7 +362,7 @@ const WindowManager = ({
                     className="w-4 h-4 bg-yellow-500 rounded-full hover:bg-yellow-400 flex items-center justify-center transition-all hover:scale-105"
                     aria-label="Minimize window"
                   >
-                    <Minus className="w-3 h-3 opacity-0 group-hover:opacity-100 text-white" />
+                    <Minus className="w-3 h-3 opacity-0 group-hover:opacity-100 text-black" />
                   </button>
                   <button
                     onClick={(e) => {
@@ -379,9 +379,9 @@ const WindowManager = ({
                     }
                   >
                     {window.isMaximized ? (
-                      <Minimize2 className="w-3 h-3 text-white" />
+                      <Minimize2 className="w-3 h-3 text-black" />
                     ) : (
-                      <Maximize2 className="w-3 h-3 opacity-0 group-hover:opacity-100 text-white" />
+                      <Maximize2 className="w-3 h-3 opacity-0 group-hover:opacity-100 text-black" />
                     )}
                   </button>
                 </div>

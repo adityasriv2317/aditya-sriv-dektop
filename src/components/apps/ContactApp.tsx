@@ -25,7 +25,7 @@ const ContactApp = () => {
         </div>
       ),
       label: "LinkedIn",
-      value: "/in/aditya-srivastava",
+      value: "/in/aditya2317",
       link: "https://linkedin.com/in/aditya2317",
       color: "text-blue-50",
     },
@@ -36,7 +36,7 @@ const ContactApp = () => {
         </div>
       ),
       label: "GitHub",
-      value: "/aditya-srivastava",
+      value: "/adityasriv2317",
       link: "https://github.com/adityasriv2317",
       color: "text-purple-50",
     },
@@ -80,12 +80,21 @@ const ContactApp = () => {
           <h2 className="text-2xl font-semibold font-suse mb-4">My Accounts</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {contactMethods.map((contact, index) => (
-              <a
+              <button
                 key={index}
-                href={contact.link}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="glass p-6 cursor-pointer flex items-center justify-between rounded-lg hover:glass-hover transition-all duration-200 hover:scale-105"
+                onClick={() => {
+                  if (contact.link.startsWith("http")) {
+                    window.dispatchEvent(
+                      new CustomEvent("open-in-browser", {
+                        detail: { url: contact.link, title: contact.label },
+                      })
+                    );
+                  } else {
+                    // mailto or other schemes - open normally
+                    window.location.href = contact.link;
+                  }
+                }}
+                className="glass p-6 cursor-pointer flex items-center justify-between rounded-lg hover:glass-hover transition-all duration-200 hover:scale-105 pointer-events-auto"
               >
                 <span className="flex items-center">
                   <div className={`${contact.color} mr-3`}>{contact.icon}</div>
@@ -94,7 +103,7 @@ const ContactApp = () => {
                   </h3>
                 </span>
                 <span className="text-gray-300 text-sm">{contact.value}</span>
-              </a>
+              </button>
             ))}
           </div>
         </div>
@@ -130,8 +139,14 @@ const ContactApp = () => {
               </div>
               <span className="flex flex-col gap-2">
                 {/* webdev resume */}
-                <a
-                  href={webResume}
+                <button
+                  onClick={() =>
+                    window.dispatchEvent(
+                      new CustomEvent("open-in-browser", {
+                        detail: { url: webResume, title: "Web Dev Resume" },
+                      })
+                    )
+                  }
                   className="px-4 py-2 cursor-pointer bg-blue-600/30 flex flex-row gap-2 hover:bg-blue-600/50 rounded-md text-sm font-medium transition"
                 >
                   <img
@@ -140,9 +155,15 @@ const ContactApp = () => {
                     className="w-5 h-5"
                   />
                   Web Dev
-                </a>
-                <a
-                  href={appResume}
+                </button>
+                <button
+                  onClick={() =>
+                    window.dispatchEvent(
+                      new CustomEvent("open-in-browser", {
+                        detail: { url: appResume, title: "App Dev Resume" },
+                      })
+                    )
+                  }
                   className="px-4 py-2 cursor-pointer bg-blue-600/30 flex flex-row gap-2 hover:bg-blue-600/50 rounded-md text-sm font-medium transition"
                 >
                   <img
@@ -155,16 +176,15 @@ const ContactApp = () => {
                     }}
                   />
                   App Dev
-                </a>
+                </button>
               </span>
             </div>
             <div
               onClick={() =>
-                window.open(
-                  "mailto:adityaxia9237@gmail.com?subject=Hello Aditya!"
-                )
+                (window.location.href =
+                  "mailto:adityaxia9237@gmail.com?subject=Hello Aditya!")
               }
-              className={`bg-green-500/20 flex items-center justify-between text-green-300 p-6 rounded-lg hover:scale-105 transition-all duration-200 text-left`}
+              className={`bg-green-500/20 flex items-center justify-between text-green-300 p-6 rounded-lg hover:scale-105 transition-all duration-200 text-left pointer-events-auto`}
             >
               <div className="flex font-src items-center mb-2">
                 <Mail className="w-5 h-5" />

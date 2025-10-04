@@ -1,11 +1,4 @@
-import {
-  ExternalLink,
-  Github,
-  Star,
-  Code,
-  Users,
-  Shield,
-} from "lucide-react";
+import { ExternalLink, Github, Star, Code, Users, Shield } from "lucide-react";
 
 const QuizakiApp = () => {
   const projectData = {
@@ -30,7 +23,7 @@ const QuizakiApp = () => {
       "Real-time chat during quizzes",
       "Responsive design for all devices",
     ],
-    githubUrl: "https://github.com/aditya-srivastava/quizaki",
+    githubUrl: "https://github.com/adityasriv2317/quizaki",
     deployedUrl: "https://quizaki.vercel.app",
     status: "Production Ready",
     type: "Real-time Web Application",
@@ -54,22 +47,38 @@ const QuizakiApp = () => {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <a
-              href={projectData.githubUrl}
-              target="_blank"
-              rel="noopener noreferrer"
+            <button
+              onClick={() =>
+                window.dispatchEvent(
+                  new CustomEvent("open-in-browser", {
+                    detail: {
+                      url: projectData.githubUrl,
+                      title: projectData.name + " - GitHub",
+                    },
+                  })
+                )
+              }
               className="glass p-6 rounded-2xl hover:rounded-full w-fit h-fit hover:bg-white/10 transition-all duration-200 hover:scale-105"
+              aria-label="Open GitHub"
             >
               <Github className="w-6 h-6 text-gray-300 group-hover:text-white" />
-            </a>
-            <a
-              href={projectData.deployedUrl}
-              target="_blank"
-              rel="noopener noreferrer"
+            </button>
+            <button
+              onClick={() =>
+                window.dispatchEvent(
+                  new CustomEvent("open-in-browser", {
+                    detail: {
+                      url: projectData.deployedUrl,
+                      title: projectData.name,
+                    },
+                  })
+                )
+              }
               className="glass p-6 rounded-2xl hover:rounded-full w-fit h-fit hover:bg-white/10 transition-all duration-200 hover:scale-105"
+              aria-label="Open Demo"
             >
               <ExternalLink className="w-6 h-6 text-gray-300 group-hover:text-white" />
-            </a>
+            </button>
           </div>
         </div>
 

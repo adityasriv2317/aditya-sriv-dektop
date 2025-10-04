@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Gamepad2 } from "lucide-react";
 
 // utils
@@ -172,19 +172,6 @@ const Desktop = () => {
 
   // Manage standalone browser windows separately from regular windows
   const [browserWindows, setBrowserWindows] = useState<BrowserWindowData[]>([]);
-
-  // Listen for global open-in-browser events so other components can open links
-  useEffect(() => {
-    const handler = (e: Event) => {
-      const detail = (e as CustomEvent)?.detail as { url: string; title?: string } | undefined;
-      if (detail?.url) {
-        openBrowser(detail.url, detail.title || "Browser");
-      }
-    };
-
-    window.addEventListener("open-in-browser", handler as EventListener);
-    return () => window.removeEventListener("open-in-browser", handler as EventListener);
-  }, [browserWindows]);
 
   const openBrowser = (url: string, title: string) => {
     // If any browser window is already visible, use it to open a new tab

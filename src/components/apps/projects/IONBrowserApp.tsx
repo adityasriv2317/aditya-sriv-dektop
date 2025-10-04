@@ -30,7 +30,8 @@ const IONBrowserApp = () => {
       "Dark/Light theme support",
     ],
     githubUrl: "https://github.com/adityasriv2317/ionBrowser/",
-    deployedUrl: "https://github.com/adityasriv2317/ionBrowser/releases/tag/preRelease",
+    deployedUrl:
+      "https://github.com/adityasriv2317/ionBrowser/releases/tag/preRelease",
     status: "Beta Release",
     type: "Mobile Browser Application",
   };
@@ -53,20 +54,22 @@ const IONBrowserApp = () => {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <button
-              onClick={() => window.dispatchEvent(new CustomEvent('open-in-browser', { detail: { url: projectData.githubUrl, title: projectData.name + ' - GitHub' } }))}
+            <a
+              href={projectData.githubUrl}
+              target="_blank"
+              rel="noopener noreferrer"
               className="glass p-6 rounded-2xl hover:rounded-full w-fit h-fit hover:bg-white/10 transition-all duration-200 hover:scale-105"
-              aria-label="Open GitHub"
             >
               <Github className="w-6 h-6 text-gray-300 group-hover:text-white" />
-            </button>
-            <button
-              onClick={() => window.dispatchEvent(new CustomEvent('open-in-browser', { detail: { url: projectData.deployedUrl, title: projectData.name } }))}
+            </a>
+            <a
+              href={projectData.deployedUrl}
+              target="_blank"
+              rel="noopener noreferrer"
               className="glass p-6 rounded-2xl hover:rounded-full w-fit h-fit hover:bg-white/10 transition-all duration-200 hover:scale-105"
-              aria-label="Open Demo"
             >
               <ExternalLink className="w-6 h-6 text-gray-300 group-hover:text-white" />
-            </button>
+            </a>
           </div>
         </div>
 

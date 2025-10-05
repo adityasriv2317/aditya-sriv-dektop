@@ -44,7 +44,7 @@ const MenuBar: React.FC<MenuBarProps> = ({ onOpenWindow, onOpenBrowser }) => {
     <>
       <div className="fixed top-0 left-0 right-0 h-8 glass menubar z-50 flex items-center justify-between px-4">
         {/* Left side - AS logo */}
-        <div className="flex cursor-pointer items-center bg-white not-hover:rounded-full hover:rounded-l-xl hover:rounded-r-xl transition-all ease-in-out px-1.5 py-0.5">
+        <div className="flex cursor-pointer items-center bg-white rounded-full transition-all ease-in-out px-1.5 py-0.5">
           <Logo />
         </div>
 

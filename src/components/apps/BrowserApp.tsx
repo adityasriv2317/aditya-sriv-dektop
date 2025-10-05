@@ -4,14 +4,7 @@ import React, {
   forwardRef,
   useImperativeHandle,
 } from "react";
-import {
-  //   RefreshCw,
-  Plus,
-  X,
-  Minus,
-  Maximize2,
-  Minimize2,
-} from "lucide-react";
+import { Plus, X, Minus, Maximize2, Minimize2, HelpCircle } from "lucide-react";
 
 interface Tab {
   id: string;
@@ -60,7 +53,6 @@ const BrowserApp = forwardRef<BrowserAppRef, BrowserAppProps>(
     });
 
     const handleDragStart = (e: React.MouseEvent) => {
-      // Prevent dragging when clicking on buttons
       if (
         isMaximized ||
         (e.target as HTMLElement).tagName === "BUTTON" ||
@@ -69,7 +61,7 @@ const BrowserApp = forwardRef<BrowserAppRef, BrowserAppProps>(
         return;
       }
 
-      e.preventDefault(); // Prevent text selection during drag
+      e.preventDefault();
       setDragState({
         isDragging: true,
         startPos: { x: e.clientX, y: e.clientY },
@@ -90,16 +82,11 @@ const BrowserApp = forwardRef<BrowserAppRef, BrowserAppProps>(
 
     const minimizeWindow = () => {
       setIsMinimized(true);
-      // When minimizing, dispatch a custom event that can be listened to by parent components
       const minimizeEvent = new CustomEvent("browser-minimized", {
         detail: { id: ref },
       });
       window.dispatchEvent(minimizeEvent);
     };
-
-    // const restoreFromMinimized = () => {
-    //   setIsMinimized(false);
-    // };
 
     const maximizeWindow = () => {
       if (isMaximized) {
@@ -122,14 +109,12 @@ const BrowserApp = forwardRef<BrowserAppRef, BrowserAppProps>(
 
     useEffect(() => {
       const handleMouseMove = (e: MouseEvent) => {
-        // Add cursor styles to body during dragging/resizing
         if (dragState.isDragging) {
           document.body.style.cursor = "grabbing";
           const deltaX = e.clientX - dragState.startPos.x;
           const deltaY = e.clientY - dragState.startPos.y;
 
-          // Keep window within viewport bounds
-          const maxX = window.innerWidth - 100; // Keep at least part of window visible
+          const maxX = window.innerWidth - 100;
           const maxY = window.innerHeight - 50;
 
           setPosition({
@@ -196,7 +181,6 @@ const BrowserApp = forwardRef<BrowserAppRef, BrowserAppProps>(
       };
 
       const handleMouseUp = () => {
-        // Reset cursor
         document.body.style.cursor = "";
         setDragState((prev) => ({ ...prev, isDragging: false }));
         setResizeState((prev) => ({
@@ -206,7 +190,6 @@ const BrowserApp = forwardRef<BrowserAppRef, BrowserAppProps>(
         }));
       };
 
-      // Always add and remove listeners to ensure cleanup on unmount
       document.addEventListener("mousemove", handleMouseMove);
       document.addEventListener("mouseup", handleMouseUp);
 
@@ -248,29 +231,6 @@ const BrowserApp = forwardRef<BrowserAppRef, BrowserAppProps>(
       return newTab.id;
     };
 
-    // Remove a tab by id (functional update to avoid races)
-    const removeTabById = (tabId: string) => {
-      setTabs((prev) => {
-        const idx = prev.findIndex((t) => t.id === tabId);
-        if (idx === -1) return prev;
-        const newTabs = prev.filter((t) => t.id !== tabId);
-
-        // If the removed tab was active, pick adjacent
-        if (activeTabId === tabId) {
-          const newActiveIndex = Math.max(0, idx - 1);
-          if (newTabs[newActiveIndex]) {
-            setActiveTabId(newTabs[newActiveIndex].id);
-            setCurrentUrl(newTabs[newActiveIndex].url);
-            setIsLoading(newTabs[newActiveIndex].isLoading);
-          } else {
-            onClose();
-          }
-        }
-
-        return newTabs;
-      });
-    };
-
     useImperativeHandle(ref, () => ({
       addTab: (tabUrl: string, tabTitle: string) => addNewTab(tabUrl, tabTitle),
     }));
@@ -280,11 +240,77 @@ const BrowserApp = forwardRef<BrowserAppRef, BrowserAppProps>(
       url: string;
       icon?: React.ReactNode;
     }[] = [
-      { name: "Cable", url: "https://cable-web-page.vercel.app/" },
-      { name: "weCaptcha", url: "https://wecaptcha.vercel.app/" },
-      { name: "Sonic Boom", url: "https://sonic-boomgame.vercel.app/" },
-      { name: "Quizaki", url: "https://quizaki.vercel.app/" },
-      { name: "Pratham", url: "https://pratham.adityasrivastava.me/" },
+      {
+        name: "Cable",
+        url: "https://cable-web-page.vercel.app/",
+        icon: (
+          <img
+            src="/icons/target.png"
+            className="w-10 h-10 rounded-md bg-gradient-to-br from-blue-200 to-purple-600 flex items-center justify-center p-1"
+          />
+        ),
+      },
+      {
+        name: "weCaptcha",
+        url: "https://wecaptcha.vercel.app/",
+        icon: (
+          <img
+            src="/icons/captcha.png"
+            className="w-10 h-10 rounded-md bg-gradient-to-br from-blue-200 to-purple-400 flex items-center justify-center p-1"
+          />
+        ),
+      },
+      {
+        name: "Sonic Boom",
+        url: "https://sonic-boomgame.vercel.app/",
+        icon: (
+          <img
+            src="/icons/sonic.png"
+            className="w-10 h-10 rounded-md bg-gradient-to-br from-blue-200 to-purple-400 flex items-center justify-center p-1"
+          />
+        ),
+      },
+      {
+        name: "Quizaki",
+        url: "https://quizaki.vercel.app/",
+        icon: (
+          <img
+            src="/icons/quizaki.svg"
+            className="w-10 h-10 rounded-md bg-gradient-to-br from-blue-200 to-purple-200 flex items-center justify-center p-1"
+          />
+        ),
+      },
+      {
+        name: "Pratham",
+        url: "https://pratham.adityasrivastava.me/",
+        icon: (
+          <img
+            src="/icons/hospital.png"
+            className="w-10 h-10 rounded-md bg-gradient-to-br from-blue-200 to-purple-400 flex items-center justify-center p-1"
+          />
+        ),
+      },
+      {
+        name: "Help",
+        url: "/help/index.html",
+        icon: (
+          <HelpCircle
+            color="black"
+            fill="white"
+            className="w-10 h-10 rounded-md bg-gradient-to-br from-blue-200 to-purple-600 flex items-center justify-center p-1"
+          />
+        ),
+      },
+      {
+        name: "My Medic",
+        url: "https://my-medic.vercel.app/",
+        icon: (
+          <img
+            src="/icons/medic.png"
+            className="w-10 h-10 rounded-md bg-gradient-to-br from-indigo-200 to-purple-600 flex items-center justify-center p-1"
+          />
+        ),
+      },
     ];
 
     const closeTab = (tabId: string, e?: React.MouseEvent) => {
@@ -292,7 +318,6 @@ const BrowserApp = forwardRef<BrowserAppRef, BrowserAppProps>(
 
       setTabs((prev) => {
         if (prev.length === 1) {
-          // closing last tab -> close window
           onClose();
           return prev;
         }
@@ -322,11 +347,9 @@ const BrowserApp = forwardRef<BrowserAppRef, BrowserAppProps>(
       }
     };
 
-    // Add an effect to handle window resize events for maximized windows
     useEffect(() => {
       const handleResize = () => {
         if (isMaximized) {
-          // Update the maximized window size when the browser window resizes
           setSize({
             width: window.innerWidth,
             height: window.innerHeight - 32,
@@ -341,7 +364,6 @@ const BrowserApp = forwardRef<BrowserAppRef, BrowserAppProps>(
     }, [isMaximized]);
 
     if (isMinimized) {
-      // When minimized, render a small indicator that can be clicked to restore
       return (
         <div
           className="fixed bottom-4 left-4 w-10 h-10 bg-gray-800/70 rounded-lg shadow-lg 
@@ -469,38 +491,47 @@ const BrowserApp = forwardRef<BrowserAppRef, BrowserAppProps>(
         {/* Browser Content Area */}
         <div className="flex flex-col flex-1 h-full min-h-0">
           {/* Iframe Content */}
-          <div className="flex-1 relative rounded-xl custom-scrollbar h-full overflow-auto">
+          <div className="flex-1 relative rounded-xl custom-scrollbar h-full overflow-hidden">
             {isLoading && (
               <div className="absolute inset-0 flex items-center justify-center bg-black/30 z-10">
                 <div className="animate-spin w-8 h-8 border-2 border-white/10 border-t-white/90 rounded-full"></div>
               </div>
             )}
 
-            {/* If this tab is a fresh new tab (about:blank), show shortcuts grid */}
+            {/* If this tab is a fresh new tab, show shortcuts grid */}
             {currentUrl === "about:blank" ? (
               <div className="p-6 grid grid-cols-2 sm:grid-cols-3 gap-4">
                 {projectShortcuts.map((s) => (
                   <button
                     key={s.url}
                     onClick={() => {
-                      const blankTab = activeTab;
-                      const newTabId = addNewTab(s.url, s.name);
-                      if (blankTab && blankTab.url === "about:blank") {
-                        // remove the blank tab and activate the new one
-                        removeTabById(blankTab.id);
-                        setActiveTabId(newTabId);
-                        const target = projectShortcuts.find(
-                          (p) => p.url === s.url
+                      setCurrentUrl(s.url);
+                      setIsLoading(true);
+                      if (activeTabId) {
+                        setTabs((prev) =>
+                          prev.map((tab) =>
+                            tab.id === activeTabId
+                              ? {
+                                  ...tab,
+                                  url: s.url,
+                                  title: s.name,
+                                  isLoading: true,
+                                }
+                              : tab
+                          )
                         );
-                        setCurrentUrl(target ? target.url : s.url);
                       }
                     }}
                     className="flex flex-col items-center justify-center p-4 bg-white/5 hover:bg-white/10 rounded-lg border border-white/5"
                     title={s.name}
                   >
-                    <div className="w-10 h-10 rounded-md bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-white font-semibold">
-                      {s.name.charAt(0)}
-                    </div>
+                    {s.icon ? (
+                      s.icon
+                    ) : (
+                      <div className="w-10 h-10 rounded-md bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-white font-semibold">
+                        {s.name.charAt(0)}
+                      </div>
+                    )}
                     <div className="mt-2 text-xs text-white/90">{s.name}</div>
                   </button>
                 ))}

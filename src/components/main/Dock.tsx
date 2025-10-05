@@ -90,7 +90,7 @@ const Dock = ({
   const handleAppClick = (app: any) => {
     // Special handling for browser app
     if (app.id === "browser" && onOpenBrowser) {
-      onOpenBrowser("about:blank", "New Tab");
+      onOpenBrowser("https://shikhar.is-a.dev/", "New Tab");
       return;
     }
 

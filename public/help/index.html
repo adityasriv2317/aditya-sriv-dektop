@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Aditya OS - Help</title>
+    <link rel="icon" href="/icons/ionpc.png" type="image/png" />
+    <style>
+      :root {
+        /* OS Theme Colors from index.css */
+        --background: 240 10% 3.9%;
+        --foreground: 0 0% 98%;
+        --desktop-bg: 220 13% 18%;
+
+        /* Glass Effects */
+        --glass-bg: 0 0% 100% / 0.05;
+        --glass-border: 0 0% 100% / 0.1;
+        --glass-hover: 0 0% 100% / 0.08;
+
+        /* Accent Colors */
+        --accent-blue: 213 94% 68%;
+        --accent-purple: 261 83% 58%;
+        --accent-green: 142 76% 36%;
+        --accent-orange: 25 95% 53%;
+
+        /* Legacy variables for compatibility */
+        --bg-gradient: linear-gradient(
+          135deg,
+          hsl(220 13% 18%),
+          hsl(240 15% 12%),
+          hsl(260 20% 8%)
+        );
+        --text-primary: rgba(255, 255, 255, 0.9);
+        --text-secondary: rgba(255, 255, 255, 0.7);
+        --accent: #6366f1;
+        --accent-light: #818cf8;
+        --border: rgba(255, 255, 255, 0.2);
+      }
+
+      /* Custom scrollbar styles from index.css */
+      .custom-scrollbar {
+        scrollbar-width: thin;
+        scrollbar-color: hsl(var(--background)) hsl(var(--glass-bg));
+      }
+      .custom-scrollbar::-webkit-scrollbar {
+        width: 8px;
+        height: 8px;
+      }
+      .custom-scrollbar::-webkit-scrollbar-thumb {
+        background: linear-gradient(
+          135deg,
+          hsl(var(--accent-blue)),
+          hsl(var(--accent-purple))
+        );
+        border-radius: 8px;
+        min-height: 40px;
+      }
+      .custom-scrollbar::-webkit-scrollbar-track {
+        background: transparent;
+      }
+      .custom-scrollbar::-webkit-scrollbar-corner {
+        background: transparent;
+      }
+
+      .glass {
+        background: hsla(var(--glass-bg));
+        backdrop-filter: blur(15px) saturate(180%);
+        border: 1px solid hsla(var(--glass-border));
+      }
+
+      * {
+        cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="white" stroke="black" stroke-width="1"><path d="M3 3l7.07 16.97 2.51-7.39 7.39-2.51L3 3z"/><path d="M13 13l6 6"/></svg>'),
+          auto;
+      }
+
+      .cursor-pointer {
+        cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="white" stroke="black" stroke-width="1"><path d="M9 9h6v6h-6z"/><path d="M3 3l7.07 16.97 2.51-7.39 7.39-2.51L3 3z"/></svg>'),
+          pointer;
+      }
+
+      body {
+        background: var(--bg-gradient);
+        color: var(--text-primary);
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+          Oxygen, Ubuntu, Cantarell, sans-serif;
+        line-height: 1.6;
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+        height: 100vh;
+      }
+
+      .container {
+        max-width: 900px;
+        margin: 0 auto;
+        padding: 2rem 1rem;
+        overflow-y: auto;
+        overflow-x: hidden;
+        height: 100vh;
+        padding-bottom: 6rem; /* Extra padding to ensure content is fully visible */
+      }
+
+      header {
+        display: flex;
+        align-items: center;
+        margin-bottom: 2rem;
+        border-bottom: 1px solid hsla(var(--glass-border));
+        padding: 1rem;
+        border-radius: 12px;
+        background: hsla(var(--glass-bg));
+        backdrop-filter: blur(15px) saturate(180%);
+        position: sticky;
+        top: 0;
+        z-index: 10;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+        margin-left: 0.5rem;
+        margin-right: 0.5rem;
+      }
+
+      header img {
+        width: 48px;
+        height: 48px;
+        margin-right: 1rem;
+        filter: drop-shadow(0 2px 5px rgba(0, 0, 0, 0.3));
+        transition: transform 0.3s ease;
+      }
+
+      header img:hover {
+        transform: scale(1.1) rotate(5deg);
+      }
+
+      h1,
+      h2,
+      h3 {
+        color: var(--text-primary);
+        font-weight: 600;
+      }
+
+      h1 {
+        font-size: 2.2rem;
+        margin-bottom: 1rem;
+        margin-top: 0;
+      }
+
+      h2 {
+        font-size: 1.8rem;
+        margin-top: 2rem;
+        margin-bottom: 1rem;
+        border-bottom: 1px solid var(--border);
+        padding-bottom: 0.5rem;
+      }
+
+      h3 {
+        font-size: 1.4rem;
+        margin-top: 1.5rem;
+        color: var(--accent-light);
+      }
+
+      p,
+      ul,
+      ol {
+        color: var(--text-secondary);
+        margin-bottom: 1rem;
+      }
+
+      a {
+        color: var(--accent-light);
+        text-decoration: none;
+      }
+
+      a:hover {
+        text-decoration: underline;
+      }
+
+      .card {
+        background: hsla(var(--glass-bg));
+        border: 1px solid hsla(var(--glass-border));
+        border-radius: 8px;
+        padding: 1.5rem;
+        margin-bottom: 1.5rem;
+        backdrop-filter: blur(15px) saturate(180%);
+        transition: transform 0.2s ease, box-shadow 0.3s ease;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+      }
+
+      .card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2),
+          0 0 0 1px rgba(255, 255, 255, 0.15);
+      }
+
+      .card h3 {
+        margin-top: 0;
+        background: linear-gradient(
+          to right,
+          hsl(var(--accent-blue)),
+          hsl(var(--accent-purple))
+        );
+        background-clip: text;
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        display: inline-block;
+      }
+
+      .shortcut {
+        display: flex;
+        justify-content: space-between;
+        padding: 0.8rem 0.5rem;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        transition: all 0.2s ease;
+      }
+
+      .shortcut:hover {
+        background: hsla(var(--glass-hover));
+        transform: translateX(5px);
+        border-radius: 4px;
+      }
+
+      .shortcut:last-child {
+        border-bottom: none;
+      }
+
+      .key {
+        background: hsla(var(--accent-blue), 0.2);
+        border: 1px solid hsla(var(--accent-blue), 0.3);
+        border-radius: 6px;
+        padding: 0.3rem 0.6rem;
+        font-family: monospace;
+        margin: 0 0.2rem;
+        display: inline-block;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        transition: all 0.2s ease;
+      }
+
+      .shortcut:hover .key {
+        background: hsla(var(--accent-blue), 0.3);
+        box-shadow: 0 3px 8px rgba(0, 0, 0, 0.3);
+      }
+
+      .feature-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+        gap: 1.5rem;
+        margin: 2rem 0;
+      }
+
+      .feature {
+        background: hsla(var(--glass-bg));
+        padding: 1.5rem;
+        border-radius: 12px;
+        border: 1px solid hsla(var(--glass-border));
+        transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+          box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        backdrop-filter: blur(15px) saturate(180%);
+        position: relative;
+        overflow: hidden;
+      }
+
+      .feature::after {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(
+          135deg,
+          hsla(var(--accent-blue), 0.1),
+          hsla(var(--accent-purple), 0.1)
+        );
+        opacity: 0;
+        transition: opacity 0.3s ease;
+        z-index: -1;
+      }
+
+      .feature:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3),
+          0 0 0 1px rgba(255, 255, 255, 0.2);
+      }
+
+      .feature:hover::after {
+        opacity: 1;
+      }
+
+      .feature h3 {
+        margin-top: 0;
+        font-weight: 600;
+        letter-spacing: 0.5px;
+      }
+
+      .feature-icon {
+        font-size: 2.5rem;
+        margin-bottom: 1.2rem;
+        background: linear-gradient(
+          135deg,
+          hsl(var(--accent-blue)),
+          hsl(var(--accent-purple))
+        );
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+        display: block;
+      }
+
+      /* Ensure consistent scrollbar visibility */
+      html {
+        overflow: hidden;
+      }
+
+      /* Animations */
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @keyframes pulse {
+        0% {
+          transform: scale(1);
+        }
+        50% {
+          transform: scale(1.05);
+        }
+        100% {
+          transform: scale(1);
+        }
+      }
+
+      h1,
+      h2,
+      h3,
+      p,
+      ul,
+      ol,
+      .card,
+      .feature {
+        animation: fadeIn 0.6s ease-out forwards;
+      }
+
+      h1 {
+        animation-delay: 0.1s;
+      }
+      h2 {
+        animation-delay: 0.2s;
+      }
+      .card {
+        animation-delay: 0.3s;
+      }
+      .feature:nth-child(1) {
+        animation-delay: 0.4s;
+      }
+      .feature:nth-child(2) {
+        animation-delay: 0.5s;
+      }
+      .feature:nth-child(3) {
+        animation-delay: 0.6s;
+      }
+      .feature:nth-child(4) {
+        animation-delay: 0.7s;
+      }
+
+      /* Modern footer */
+      footer {
+        text-align: center;
+        margin-top: 4rem;
+        margin-bottom: 1rem;
+        margin-left: 0.5rem;
+        margin-right: 0.5rem;
+        padding: 2rem 1rem;
+        border-top: 1px solid hsla(var(--glass-border));
+        font-size: 0.9rem;
+        color: var(--text-secondary);
+        background: hsla(var(--glass-bg));
+        backdrop-filter: blur(15px) saturate(180%);
+        border-radius: 12px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container custom-scrollbar">
+      <header>
+        <img src="/icons/ionpc.png" alt="Aditya OS Logo" />
+        <h1>Aditya OS - Help Guide</h1>
+      </header>
+
+      <div class="card">
+        <h3>Welcome to Aditya OS!</h3>
+        <p>
+          This interactive portfolio OS provides a desktop-like experience to
+          explore Aditya Srivastava's projects and professional work. Navigate
+          through the interface just like a real operating system and discover
+          various applications showcasing different projects and skills.
+        </p>
+      </div>
+
+      <h2>Getting Started</h2>
+      <p>
+        The Aditya OS desktop environment consists of several components that
+        mimic a real operating system:
+      </p>
+
+      <div class="feature-grid">
+        <div class="feature">
+          <div class="feature-icon">🖥️</div>
+          <h3>Desktop Icons</h3>
+          <p>
+            Double-click on desktop icons to open the corresponding
+            applications.
+          </p>
+        </div>
+
+        <div class="feature">
+          <div class="feature-icon">🔍</div>
+          <h3>Menu Bar</h3>
+          <p>
+            Access various system functions and portfolio sections from the top
+            menu.
+          </p>
+        </div>
+
+        <div class="feature">
+          <div class="feature-icon">📱</div>
+          <h3>Dock</h3>
+          <p>Quick access to frequently used applications and open windows.</p>
+        </div>
+
+        <div class="feature">
+          <div class="feature-icon">🌐</div>
+          <h3>ION Browser</h3>
+          <p>
+            Browse Aditya's projects and web content within the OS environment.
+          </p>
+        </div>
+      </div>
+
+      <h2>Desktop Navigation</h2>
+
+      <h3>Using the Desktop</h3>
+      <p>The desktop is your main workspace. Here you can:</p>
+      <ul>
+        <li>Double-click on icons to open applications</li>
+        <li>
+          Right-click on the desktop for the context menu with additional
+          options
+        </li>
+        <li>Rearrange icons by dragging them to different positions</li>
+        <li>Open multiple windows and manage them within the workspace</li>
+      </ul>
+
+      <h3>Window Management</h3>
+      <p>Windows in Aditya OS can be controlled in various ways:</p>
+      <ul>
+        <li>Drag a window's title bar to move it around</li>
+        <li>Resize windows by dragging any edge or corner</li>
+        <li>
+          Minimize, maximize, or close using the window controls in the
+          top-right corner
+        </li>
+        <li>Double-click the title bar to toggle maximize/restore</li>
+        <li>Click on minimized windows in the dock to restore them</li>
+      </ul>
+
+      <h2>Applications</h2>
+
+      <h3>ION Browser</h3>
+      <p>The integrated browser allows you to:</p>
+      <ul>
+        <li>Open multiple tabs within a single window</li>
+        <li>Navigate to external websites</li>
+        <li>View project demonstrations directly in the OS</li>
+        <li>Access helpful shortcuts on the new tab page</li>
+      </ul>
+
+      <h3>Project Apps</h3>
+      <p>Each project has a dedicated application showcasing its features:</p>
+      <ul>
+        <li><strong>Lumina AI:</strong> AI conversation platform</li>
+        <li><strong>Sampark AI:</strong> AI-powered communication tool</li>
+        <li><strong>Quizaki:</strong> Interactive quiz platform</li>
+        <li><strong>Weather App:</strong> Weather forecast application</li>
+        <li><strong>Sonic Boom:</strong> Game development project</li>
+      </ul>
+
+      <h2>System Features</h2>
+
+      <h3>System Preferences</h3>
+      <p>Customize your Aditya OS experience using System Preferences:</p>
+      <ul>
+        <li>Change the desktop wallpaper gradient</li>
+        <li>Toggle between light and dark mode</li>
+        <li>Reset to default settings</li>
+      </ul>
+
+      <h2>About Aditya</h2>
+      <p>Aditya Srivastava is a Full Stack Developer with expertise in:</p>
+      <ul>
+        <li>Frontend technologies (React, TypeScript, Tailwind CSS)</li>
+        <li>Backend development (Node.js, Express, MongoDB)</li>
+        <li>AI and machine learning integration</li>
+        <li>Interactive web experiences</li>
+        <li>UI/UX design and implementation</li>
+      </ul>
+
+      <p>
+        Explore the various applications in this OS to learn more about Aditya's
+        projects and skills.
+      </p>
+
+      <footer>
+        <div
+          style="
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1rem;
+          "
+        >
+          <img
+            src="/icons/ionpc.png"
+            alt="Aditya OS Logo"
+            style="width: 30px; height: 30px; margin-right: 10px"
+          />
+          <span style="font-size: 1.2rem; font-weight: 600"
+            >Aditya OS v1.0</span
+          >
+        </div>
+        <p>Interactive Portfolio Operating System</p>
+        <p>&copy; 2025 Aditya Srivastava</p>
+      </footer>
+    </div>
+  </body>
+</html>

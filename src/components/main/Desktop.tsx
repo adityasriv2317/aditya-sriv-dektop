@@ -173,39 +173,8 @@ const Desktop = () => {
   // Manage standalone browser windows separately from regular windows
   const [browserWindows, setBrowserWindows] = useState<BrowserWindowData[]>([]);
 
-  const openBrowser = (url: string, title: string) => {
-    // If any browser window is already visible, use it to open a new tab
-    const anyVisibleBrowser = browserWindows.find((bw) => bw.isVisible);
-
-    if (anyVisibleBrowser && anyVisibleBrowser.ref.current) {
-      // Add a new tab to the existing browser window
-      anyVisibleBrowser.ref.current.addTab(url, title);
-      return;
-    }
-
-    // Check if we have a hidden browser we can reuse
-    const anyHiddenBrowser = browserWindows.find((bw) => !bw.isVisible);
-
-    if (anyHiddenBrowser) {
-      // Make it visible and open the URL in a new tab
-      setBrowserWindows((prev) =>
-        prev.map((bw) =>
-          bw.id === anyHiddenBrowser.id ? { ...bw, isVisible: true } : bw
-        )
-      );
-
-      // If the browser has a ref with the addTab method, use it
-      if (anyHiddenBrowser.ref.current) {
-        setTimeout(() => {
-          anyHiddenBrowser.ref.current?.addTab(url, title);
-        }, 100); // Small delay to ensure the browser is visible first
-      }
-
-      soundManager.windowOpen();
-      return;
-    }
-
-    // Otherwise create a new browser window
+  // Function to create a new browser window
+  const createNewBrowser = (url: string, title: string) => {
     const newBrowserId = `browser-${Date.now()}`;
     const browserRef = React.createRef<BrowserAppRef>();
 
@@ -237,6 +206,50 @@ const Desktop = () => {
       },
     ]);
     soundManager.windowOpen();
+    return newBrowserId;
+  };
+
+  const openBrowser = (url: string, title: string) => {
+    // If any browser window is already visible, use it to open a new tab
+    const anyVisibleBrowser = browserWindows.find((bw) => bw.isVisible);
+
+    if (anyVisibleBrowser && anyVisibleBrowser.ref.current) {
+      // Add a new tab to the existing browser window
+      anyVisibleBrowser.ref.current.addTab(url, title);
+      return;
+    }
+
+    // Check if we have a hidden browser we can reuse
+    const anyHiddenBrowser = browserWindows.find((bw) => !bw.isVisible);
+
+    if (anyHiddenBrowser) {
+      // First, make sure we have a ref to add a tab
+      if (!anyHiddenBrowser.ref.current) {
+        // If the ref is not available, create a new browser instead
+        createNewBrowser(url, title);
+        return;
+      }
+      
+      // Make it visible first
+      setBrowserWindows((prev) =>
+        prev.map((bw) =>
+          bw.id === anyHiddenBrowser.id ? { ...bw, isVisible: true } : bw
+        )
+      );
+      
+      // Use a more reliable way to add the tab after the browser is visible
+      setTimeout(() => {
+        if (anyHiddenBrowser.ref.current) {
+          anyHiddenBrowser.ref.current.addTab(url, title);
+        }
+      }, 200); // Increased timeout for more reliability
+      
+      soundManager.windowOpen();
+      return;
+    }
+
+    // If no browser exists, create a new one
+    createNewBrowser(url, title);
   };
 
   const closeWindow = (windowId: string) => {
@@ -295,6 +308,10 @@ const Desktop = () => {
       case "new-document":
         alert("New Document feature - Coming Soon!");
         break;
+      case "help":
+        // Open help page in browser
+        openBrowser("/help/index.html", "Aditya OS - Help");
+        break;
       case "settings":
         openWindow(
           "settings",
@@ -342,7 +359,7 @@ const Desktop = () => {
       onClick={closeContextMenu}
     >
       {/* Desktop wallpaper overlay */}
-      <div className="absolute inset-0 bg-indigo-800/20" />
+      <div className="absolute inset-0 bg-indigo-900/20" />
 
       {/* Desktop Icons */}
       {desktopIcons.map((icon) => (
